@@ -24,6 +24,7 @@ class Sensor(SensorBase, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     serial_number: str = Field(unique=True, max_length=100)
+    last_event_id: Optional[uuid.UUID] = Field(default=None, foreign_key="sensor_events.id")
 
 
 class SensorCreate(SensorBase):

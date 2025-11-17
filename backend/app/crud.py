@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from typing import Any
 
 from sqlmodel import Session, select
@@ -6,6 +7,8 @@ from sqlmodel import Session, select
 from app.core.security import get_password_hash, verify_password
 from app.models.item_model import Item, ItemCreate
 from app.models.user_model import User, UserCreate, UserUpdate
+from app.models.sensor_events import SensorEvent, SensorEventCreate
+from app.models.usage_sessions import UsageSession, UsageSessionCreate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -53,3 +56,30 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def create_sensor_event(
+    *,
+    session: Session,
+    sensor_event_in: SensorEventCreate,
+    raw_payload: dict | None = None,
+) -> SensorEvent:
+    """Create a new sensor event."""
+    db_event = SensorEvent.model_validate(
+        sensor_event_in, update={"raw_payload": raw_payload}
+    )
+    session.add(db_event)
+    session.commit()
+    session.refresh(db_event)
+    return db_event
+
+
+def create_usage_session(
+    *, session: Session, usage_session_in: UsageSessionCreate
+) -> UsageSession:
+    """Create a new usage session."""
+    db_session = UsageSession.model_validate(usage_session_in)
+    session.add(db_session)
+    session.commit()
+    session.refresh(db_session)
+    return db_session
