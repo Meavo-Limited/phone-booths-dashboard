@@ -107,6 +107,7 @@ def on_message_booth_status(
             
             # Update sensor's last event ID
             sensor.last_event_id = sensor_event.id
+            sensor.updated_at = datetime.utcnow()
             session.add(sensor)
             session.commit()
             

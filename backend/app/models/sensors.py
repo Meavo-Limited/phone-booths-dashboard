@@ -36,3 +36,4 @@ class SensorRead(SensorBase):
     phone_booth_id: uuid.UUID
     created_at: datetime
     updated_at: datetime
+    last_event_id: Optional[uuid.UUID]
