@@ -1,3 +1,4 @@
+from sqlmodel import SQLModel
 from .booth_states import BoothState
 from .clients import Client
 from .item_model import Item
