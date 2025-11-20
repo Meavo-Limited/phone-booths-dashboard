@@ -19,6 +19,7 @@ import {
     PaginationRoot,
 } from "@/components/ui/pagination"
 import PendingItems from "@/components/Pending/PendingItems"
+import EditWorkdays from "@/components/PhoneBooths/EditWorkdays"
 
 export type PhoneBoothsRead = {
     data: Array<PhoneBoothRead>
@@ -149,7 +150,7 @@ function PhoneBooths() {
             <Heading size="lg" pt={12} mb={4}>
                 Phone Booths
             </Heading>
-
+            <EditWorkdays/>
             <PhoneBoothsTable />
         </Container>
     )

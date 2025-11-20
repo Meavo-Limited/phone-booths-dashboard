@@ -136,6 +136,15 @@ export type PhoneBoothRead = {
     updated_at: string;
 };
 
+/**
+ * Request model for bulk updating workday settings across all phone booths.
+ */
+export type PhoneBoothsBulkWorkdayUpdate = {
+    workday_start: string;
+    workday_end: string;
+    working_days_mask: number;
+};
+
 export type PhoneBoothsRead = {
     data: Array<PhoneBoothRead>;
     count: number;
@@ -525,6 +534,14 @@ export type PhoneBoothsDeletePhoneBoothData = {
 };
 
 export type PhoneBoothsDeletePhoneBoothResponse = (Message);
+
+export type PhoneBoothsBulkUpdateWorkdaySettingsData = {
+    requestBody: PhoneBoothsBulkWorkdayUpdate;
+};
+
+export type PhoneBoothsBulkUpdateWorkdaySettingsResponse = ({
+    [key: string]: unknown;
+});
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;

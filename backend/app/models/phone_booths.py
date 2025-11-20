@@ -58,3 +58,10 @@ class PhoneBoothsRead(SQLModel):
 class WorkdayResponse(BaseModel):
     working_days: int
     total_hours: int
+
+
+class PhoneBoothsBulkWorkdayUpdate(SQLModel):
+    """Request model for bulk updating workday settings across all phone booths."""
+    workday_start: time
+    workday_end: time
+    working_days_mask: int

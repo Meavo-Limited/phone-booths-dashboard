@@ -704,6 +704,29 @@ export const PhoneBoothReadSchema = {
     title: 'PhoneBoothRead'
 } as const;
 
+export const PhoneBoothsBulkWorkdayUpdateSchema = {
+    properties: {
+        workday_start: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday Start'
+        },
+        workday_end: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday End'
+        },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        }
+    },
+    type: 'object',
+    required: ['workday_start', 'workday_end', 'working_days_mask'],
+    title: 'PhoneBoothsBulkWorkdayUpdate',
+    description: 'Request model for bulk updating workday settings across all phone booths.'
+} as const;
+
 export const PhoneBoothsReadSchema = {
     properties: {
         data: {
