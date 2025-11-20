@@ -4,10 +4,10 @@ from typing import Any, List, Optional
 
 from app.utils import calculate_working_days_and_hours
 from fastapi import APIRouter, HTTPException, status
-from sqlmodel import select
+from sqlmodel import select, func
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models.phone_booths import PhoneBooth, PhoneBoothCreate, PhoneBoothRead, WorkdayResponse
+from app.models.phone_booths import PhoneBooth, PhoneBoothCreate, PhoneBoothRead, PhoneBoothsRead, WorkdayResponse
 from app.models.general_models import Message
 import logging
 
@@ -18,7 +18,38 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/phone-booths", tags=["phone_booths"])
 
 
-@router.get("/", response_model=List[PhoneBoothRead])
+@router.get("/", response_model=PhoneBoothsRead)
+def read_phone_booths_paginated(
+    session: SessionDep,
+    current_user: CurrentUser,
+    client_id: Optional[uuid.UUID] = None,
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """List phone booths. Superusers see all; others limited to their client."""
+    logger.info(f"User {current_user} is requesting phone booths list")
+    if current_user.is_superuser:
+        count_statement = select(func.count()).select_from(PhoneBooth)
+        count = session.exec(count_statement).one()
+        statement = select(PhoneBooth)
+    else:
+        if not current_user.client_id:
+            logger.warning(f"User {current_user} has no client_id; returning empty data.")
+            return PhoneBoothsRead(data=[], count=0)
+        count_statement = (
+            select(func.count())
+            .select_from(PhoneBooth)
+            .where(PhoneBooth.client_id == current_user.client_id)
+        )
+        count = session.exec(count_statement).one()
+        statement = select(PhoneBooth).where(PhoneBooth.client_id == current_user.client_id)
+    
+    statement = statement.offset(skip).limit(limit)
+    booths = session.exec(statement).all()
+    
+    return PhoneBoothsRead(data=booths, count=count)
+
+@router.get("/all", response_model=List[PhoneBoothRead])
 def read_phone_booths(
     session: SessionDep,
     current_user: CurrentUser,
@@ -41,7 +72,6 @@ def read_phone_booths(
     booths = session.exec(statement).all()
     
     return booths
-
 
 @router.get("/busy", response_model=List[PhoneBoothRead])
 def read_busy_phone_booths(

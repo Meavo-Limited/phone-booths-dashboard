@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsPaginatedData, PhoneBoothsReadPhoneBoothsPaginatedResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class BoothStatesService {
     /**
@@ -601,16 +601,16 @@ export class OrgUnitTypesService {
 
 export class PhoneBoothsService {
     /**
-     * Read Phone Booths
+     * Read Phone Booths Paginated
      * List phone booths. Superusers see all; others limited to their client.
      * @param data The data for the request.
      * @param data.clientId
      * @param data.skip
      * @param data.limit
-     * @returns PhoneBoothRead Successful Response
+     * @returns PhoneBoothsRead Successful Response
      * @throws ApiError
      */
-    public static readPhoneBooths(data: PhoneBoothsReadPhoneBoothsData = {}): CancelablePromise<PhoneBoothsReadPhoneBoothsResponse> {
+    public static readPhoneBoothsPaginated(data: PhoneBoothsReadPhoneBoothsPaginatedData = {}): CancelablePromise<PhoneBoothsReadPhoneBoothsPaginatedResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/phone-booths/',
@@ -638,6 +638,31 @@ export class PhoneBoothsService {
             url: '/api/v1/phone-booths/',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Phone Booths
+     * List phone booths. Superusers see all; others limited to their client.
+     * @param data The data for the request.
+     * @param data.clientId
+     * @param data.skip
+     * @param data.limit
+     * @returns PhoneBoothRead Successful Response
+     * @throws ApiError
+     */
+    public static readPhoneBooths(data: PhoneBoothsReadPhoneBoothsData = {}): CancelablePromise<PhoneBoothsReadPhoneBoothsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/phone-booths/all',
+            query: {
+                client_id: data.clientId,
+                skip: data.skip,
+                limit: data.limit
+            },
             errors: {
                 422: 'Validation Error'
             }

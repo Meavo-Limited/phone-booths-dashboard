@@ -696,6 +696,25 @@ export const PhoneBoothReadSchema = {
     title: 'PhoneBoothRead'
 } as const;
 
+export const PhoneBoothsReadSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/PhoneBoothRead'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'PhoneBoothsRead'
+} as const;
+
 export const PrivateUserCreateSchema = {
     properties: {
         email: {

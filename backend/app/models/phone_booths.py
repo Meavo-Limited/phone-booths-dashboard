@@ -50,6 +50,10 @@ class PhoneBoothRead(PhoneBoothBase):
     created_at: datetime
     updated_at: datetime
 
+class PhoneBoothsRead(SQLModel):
+    data: list[PhoneBoothRead]
+    count: int
+
 class WorkdayResponse(BaseModel):
     working_days: int
     total_hours: int

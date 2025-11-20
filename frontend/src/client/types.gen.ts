@@ -134,6 +134,11 @@ export type PhoneBoothRead = {
     updated_at: string;
 };
 
+export type PhoneBoothsRead = {
+    data: Array<PhoneBoothRead>;
+    count: number;
+};
+
 export type PrivateUserCreate = {
     email: string;
     password: string;
@@ -460,6 +465,20 @@ export type OrgUnitTypesDeleteOrgUnitTypeData = {
 
 export type OrgUnitTypesDeleteOrgUnitTypeResponse = (Message);
 
+export type PhoneBoothsReadPhoneBoothsPaginatedData = {
+    clientId?: (string | null);
+    limit?: number;
+    skip?: number;
+};
+
+export type PhoneBoothsReadPhoneBoothsPaginatedResponse = (PhoneBoothsRead);
+
+export type PhoneBoothsCreatePhoneBoothData = {
+    requestBody: PhoneBoothCreate;
+};
+
+export type PhoneBoothsCreatePhoneBoothResponse = (PhoneBoothRead);
+
 export type PhoneBoothsReadPhoneBoothsData = {
     clientId?: (string | null);
     limit?: number;
@@ -467,12 +486,6 @@ export type PhoneBoothsReadPhoneBoothsData = {
 };
 
 export type PhoneBoothsReadPhoneBoothsResponse = (Array<PhoneBoothRead>);
-
-export type PhoneBoothsCreatePhoneBoothData = {
-    requestBody: PhoneBoothCreate;
-};
-
-export type PhoneBoothsCreatePhoneBoothResponse = (PhoneBoothRead);
 
 export type PhoneBoothsReadBusyPhoneBoothsData = {
     clientId?: (string | null);
