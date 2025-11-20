@@ -1,9 +1,10 @@
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta, timezone, date
 from pathlib import Path
 from typing import Any
 
+from app.models.phone_booths import WorkdayResponse
 import emails  # type: ignore
 import jwt
 from jinja2 import Template
@@ -121,3 +122,40 @@ def verify_password_reset_token(token: str) -> str | None:
         return str(decoded_token["sub"])
     except InvalidTokenError:
         return None
+
+def decode_bitmask(mask: int) -> set[int]:
+    # Monday = 0 ... Sunday = 6
+    return {i for i in range(7) if mask & (1 << i)}
+
+def working_days_fast(start: date, end: date, mask: int) -> int:
+    weekdays = decode_bitmask(mask)
+
+    total_days = (end - start).days + 1
+    full_weeks = total_days // 7
+    remainder = total_days % 7
+
+    # Count weekdays in a full week
+    full_week_days = len(weekdays) * full_weeks
+
+    # Count days in the remainder window
+    remainder_days = 0
+    for i in range(remainder):
+        if (start + timedelta(days=i)).weekday() in weekdays:
+            remainder_days += 1
+
+    return full_week_days + remainder_days
+
+def calculate_working_days_and_hours(
+    start: date,
+    end: date,
+    mask: int,
+    day_start: time,
+    day_end: time,
+) -> tuple[int, int]:
+    """Returns (working_days, total_hours)."""
+    working_days = working_days_fast(start, end, mask)
+    hours_per_day = (datetime.combine(date.min, day_end) -
+                     datetime.combine(date.min, day_start)).total_seconds() / 3600
+    total_hours = int(working_days * hours_per_day)
+    
+    return working_days, total_hours

@@ -1,11 +1,13 @@
+from datetime import date, time
 import uuid
 from typing import Any, List, Optional
 
+from app.utils import calculate_working_days_and_hours
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models.phone_booths import PhoneBooth, PhoneBoothCreate, PhoneBoothRead
+from app.models.phone_booths import PhoneBooth, PhoneBoothCreate, PhoneBoothRead, WorkdayResponse
 from app.models.general_models import Message
 import logging
 
@@ -70,6 +72,22 @@ def read_busy_phone_booths(
     
     return booths
 
+@router.get("/calculate-working-time", response_model=WorkdayResponse)
+def calculate_working_time(start_date: date, end_date: date, workday_start: time, workday_end: time, workdays_mask: int) -> Any:
+    
+    logger.info(f"Calculating working time from {start_date} to {end_date} with workday {workday_start}-{workday_end} and mask {workdays_mask}")
+    working_days, total_hours = calculate_working_days_and_hours(
+        start=start_date,
+        end=end_date,
+        day_start=workday_start,
+        day_end=workday_end,
+        mask=workdays_mask,
+    )
+    
+    return WorkdayResponse(
+        working_days=working_days,
+        total_hours=total_hours,
+    )
 
 @router.get("/{id}", response_model=PhoneBoothRead)
 def read_phone_booth(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
@@ -118,3 +136,5 @@ def delete_phone_booth(session: SessionDep, current_user: CurrentUser, id: uuid.
     session.delete(booth)
     session.commit()
     return Message(message="Phone booth deleted successfully")
+
+
