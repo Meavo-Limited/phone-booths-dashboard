@@ -562,6 +562,10 @@ export const PhoneBoothCreateSchema = {
             format: 'time',
             title: 'Workday End'
         },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        },
         client_id: {
             anyOf: [
                 {
@@ -588,7 +592,7 @@ export const PhoneBoothCreateSchema = {
         }
     },
     type: 'object',
-    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end'],
+    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end', 'working_days_mask'],
     title: 'PhoneBoothCreate'
 } as const;
 
@@ -651,6 +655,10 @@ export const PhoneBoothReadSchema = {
             format: 'time',
             title: 'Workday End'
         },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        },
         id: {
             type: 'string',
             format: 'uuid',
@@ -692,7 +700,7 @@ export const PhoneBoothReadSchema = {
         }
     },
     type: 'object',
-    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end', 'id', 'client_id', 'org_unit_id', 'created_at', 'updated_at'],
+    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end', 'working_days_mask', 'id', 'client_id', 'org_unit_id', 'created_at', 'updated_at'],
     title: 'PhoneBoothRead'
 } as const;
 

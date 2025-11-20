@@ -114,6 +114,7 @@ export type PhoneBoothCreate = {
     working_hours: number;
     workday_start: string;
     workday_end: string;
+    working_days_mask: number;
     client_id?: (string | null);
     org_unit_id?: (string | null);
 };
@@ -127,6 +128,7 @@ export type PhoneBoothRead = {
     working_hours: number;
     workday_start: string;
     workday_end: string;
+    working_days_mask: number;
     id: string;
     client_id: (string | null);
     org_unit_id: (string | null);

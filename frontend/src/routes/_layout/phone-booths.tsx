@@ -47,6 +47,11 @@ function getPhoneBooths({ page }: { page: number }) {
     }
 }
 
+// Helper to decode working_days_mask
+function decodeWorkingDays(mask: number) {
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    return days.filter((_, i) => (mask & (1 << i)) !== 0).join(", ")
+}
 // ------------------------------
 // Table Component
 // ------------------------------
@@ -99,6 +104,7 @@ function PhoneBoothsTable() {
                         <Table.ColumnHeader w="sm">Workday Start</Table.ColumnHeader>
                         <Table.ColumnHeader w="sm">Workday End</Table.ColumnHeader>
                         <Table.ColumnHeader w="sm">Working Hours</Table.ColumnHeader>
+                        <Table.ColumnHeader w="sm">Workdays</Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>
 
@@ -110,6 +116,7 @@ function PhoneBoothsTable() {
                             <Table.Cell>{booth.workday_start}</Table.Cell>
                             <Table.Cell>{booth.workday_end}</Table.Cell>
                             <Table.Cell>{booth.working_hours} hrs</Table.Cell>
+                            <Table.Cell>{decodeWorkingDays(booth.working_days_mask)}</Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>

@@ -17,6 +17,7 @@ class PhoneBoothBase(SQLModel):
     working_hours: int
     workday_start: time
     workday_end: time
+    working_days_mask: int
 
 
 class PhoneBooth(PhoneBoothBase, table=True):
