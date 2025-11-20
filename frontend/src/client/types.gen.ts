@@ -112,6 +112,8 @@ export type PhoneBoothCreate = {
     last_seen?: (string | null);
     state_id?: (number | null);
     working_hours: number;
+    workday_start: string;
+    workday_end: string;
     client_id?: (string | null);
     org_unit_id?: (string | null);
 };
@@ -123,6 +125,8 @@ export type PhoneBoothRead = {
     last_seen?: (string | null);
     state_id?: (number | null);
     working_hours: number;
+    workday_start: string;
+    workday_end: string;
     id: string;
     client_id: (string | null);
     org_unit_id: (string | null);
@@ -283,6 +287,11 @@ export type ValidationError = {
     loc: Array<(string | number)>;
     msg: string;
     type: string;
+};
+
+export type WorkdayResponse = {
+    working_days: number;
+    total_hours: number;
 };
 
 export type BoothStatesReadBoothStatesResponse = (Array<BoothStateRead>);
@@ -472,6 +481,16 @@ export type PhoneBoothsReadBusyPhoneBoothsData = {
 };
 
 export type PhoneBoothsReadBusyPhoneBoothsResponse = (Array<PhoneBoothRead>);
+
+export type PhoneBoothsCalculateWorkingTimeData = {
+    endDate: string;
+    startDate: string;
+    workdayEnd: string;
+    workdaysMask: number;
+    workdayStart: string;
+};
+
+export type PhoneBoothsCalculateWorkingTimeResponse = (WorkdayResponse);
 
 export type PhoneBoothsReadPhoneBoothData = {
     id: string;
