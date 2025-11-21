@@ -156,38 +156,57 @@ def update_phone_booth(*, session: SessionDep, current_user: CurrentUser, id: uu
     return booth
 
 
+from datetime import datetime, timedelta, time
+
 @router.patch("/workday/bulk-update", response_model=dict)
 def bulk_update_workday_settings(
     *, session: SessionDep, current_user: CurrentUser, update_in: PhoneBoothsBulkWorkdayUpdate
 ) -> Any:
     """
-    Bulk update workday settings (start time, end time, and working days mask) for all phone booths.
-    Superusers can update all booths; regular users can only update booths in their client.
+    Bulk update workday settings (start time, end time, working days mask, and derived working_hours)
+    for all phone booths.
     """
+    # Access rules
     if current_user.is_superuser:
         statement = select(PhoneBooth)
     else:
         if not current_user.client_id:
             raise HTTPException(status_code=403, detail="User has no client")
         statement = select(PhoneBooth).where(PhoneBooth.client_id == current_user.client_id)
-    
+
     booths = session.exec(statement).all()
-    
+
     if not booths:
         raise HTTPException(status_code=404, detail="No phone booths found")
-    
-    # Update all booths with new workday settings
+
+    # --- Calculate working_hours ---
+    start: time = update_in.workday_start
+    end: time = update_in.workday_end
+
+    # Convert to datetime for timedelta calculation
+    dt_start = datetime.combine(datetime.today(), start)
+    dt_end = datetime.combine(datetime.today(), end)
+
+    # Handle overnight (e.g. 22:00 → 06:00 next day)
+    if dt_end <= dt_start:
+        dt_end += timedelta(days=1)
+
+    working_hours = (dt_end - dt_start).total_seconds() / 3600
+
+    # --- Bulk update ---
     for booth in booths:
-        booth.workday_start = update_in.workday_start
-        booth.workday_end = update_in.workday_end
+        booth.workday_start = start
+        booth.workday_end = end
         booth.working_days_mask = update_in.working_days_mask
+        booth.working_hours = working_hours
         session.add(booth)
-    
+
     session.commit()
-    
+
     return {
         "message": f"Successfully updated {len(booths)} phone booth(s)",
-        "updated_count": len(booths)
+        "updated_count": len(booths),
+        "working_hours": working_hours,
     }
 
 
