@@ -4,6 +4,7 @@ import { Box, Heading, Table } from "@chakra-ui/react"
 interface BoothInfo {
   name: string
   workingHours: number
+  workingDaysMask: number
 }
 
 interface Props {
@@ -13,36 +14,72 @@ interface Props {
   selectedDates: Date[]
 }
 
+const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+// Convert working_days_mask → "Mon, Tue, Thu"
+function maskToDays(mask: number): string {
+  return DAY_LABELS.filter((_, idx) => mask & (1 << idx)).join(", ")
+}
+
+// Count how many working days occur in the selected date range
+function countWorkingDaysInRange(start: Date, end: Date, mask: number): number {
+  let count = 0
+  const current = new Date(start)
+
+  while (current <= end) {
+    const jsDay = current.getDay() // 0=Sun, 1=Mon, ..., 6=Sat
+
+    // Convert JS day → our bitmask index (Mon=0 → Sun=6)
+    const bitIndex = jsDay === 0 ? 6 : jsDay - 1
+
+    if (mask & (1 << bitIndex)) count++
+
+    current.setDate(current.getDate() - 0 + 1)
+  }
+
+  return count
+}
+
 export function UsageTable({ data, boothIds, boothMap, selectedDates }: Props) {
-  // 🧮 Compute summary table data
   const summaryData = useMemo(() => {
     if (!data.length || !boothIds.length) return []
 
-    const totalDays =
-      selectedDates.length === 2
-        ? Math.ceil(
-            (selectedDates[1].getTime() - selectedDates[0].getTime()) /
-              (1000 * 60 * 60 * 24)
-          ) + 1
-        : 1
+    const start =
+      selectedDates.length === 2 ? selectedDates[0] : selectedDates[0]
+    const end =
+      selectedDates.length === 2 ? selectedDates[1] : selectedDates[0]
 
     return boothIds.map((boothId) => {
-      const boothInfo = boothMap[boothId]
-      const workingHours = boothInfo?.workingHours || 8
-      const totalAvailableHours = totalDays * workingHours
-      
-      const totalUsage = data.reduce((sum, day) => sum + (day[boothId] || 0), 0)
-      const percentage = (totalUsage / totalAvailableHours) * 100
+      const booth = boothMap[boothId]
+      if (!booth) return null
+
+      const workingHours = booth.workingHours || 8
+      const mask = booth.workingDaysMask
+
+      const workingDaysCount = countWorkingDaysInRange(start, end, mask)
+
+      const totalAvailableHours = workingDaysCount * workingHours
+
+      const totalUsage = data.reduce(
+        (sum, day) => sum + (day[boothId] || 0),
+        0
+      )
+
+      const percentage =
+        totalAvailableHours > 0
+          ? (totalUsage / totalAvailableHours) * 100
+          : 0
 
       return {
         id: boothId,
-        booth: boothInfo?.name || boothId,
+        booth: booth.name,
+        workingHours,
+        workingDays: maskToDays(mask),
         totalUsage,
         totalAvailableHours,
         percentage,
-        workingHours,
       }
-    })
+    }).filter(Boolean)
   }, [data, boothIds, boothMap, selectedDates])
 
   return (
@@ -50,25 +87,29 @@ export function UsageTable({ data, boothIds, boothMap, selectedDates }: Props) {
       <Heading size="md" mb={3}>
         Booth Usage Summary
       </Heading>
+
       <Table.Root size="sm" variant="outline">
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>Client / Booth</Table.ColumnHeader>
-            <Table.ColumnHeader>Working Hours/Day</Table.ColumnHeader>
+            <Table.ColumnHeader>Working Days</Table.ColumnHeader>
+            <Table.ColumnHeader>Hours/Day</Table.ColumnHeader>
             <Table.ColumnHeader>Usage (hrs)</Table.ColumnHeader>
             <Table.ColumnHeader textAlign="end">Usage %</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
+
         <Table.Body>
           {summaryData.map((item) => (
-            <Table.Row key={item.id}>
-              <Table.Cell>{item.booth}</Table.Cell>
-              <Table.Cell>{item.workingHours}</Table.Cell>
+            <Table.Row key={item!.id}>
+              <Table.Cell>{item!.booth}</Table.Cell>
+              <Table.Cell>{item!.workingDays}</Table.Cell>
+              <Table.Cell>{item!.workingHours}</Table.Cell>
               <Table.Cell>
-                {item.totalUsage.toFixed(2)}/{item.totalAvailableHours}
+                {item!.totalUsage.toFixed(2)}/{item!.totalAvailableHours}
               </Table.Cell>
               <Table.Cell textAlign="end">
-                {item.percentage.toFixed(1)}%
+                {item!.percentage.toFixed(1)}%
               </Table.Cell>
             </Table.Row>
           ))}

@@ -59,6 +59,7 @@ function prepareUsageChartData(data: any[], checkedItems: string[]) {
 interface BoothInfo {
   name: string
   workingHours: number
+  workingDaysMask: number
 }
 
 // --- React Hook: unified data source for usage reports ---
@@ -85,6 +86,7 @@ export function useUsageReportsData(
       map[b.id] = {
         name: `${b.name} (${b.serial_number})`,
         workingHours: b.working_hours || 8, // Default to 8 if not specified
+        workingDaysMask: b.working_days_mask || 0,
       }
     })
     return map
