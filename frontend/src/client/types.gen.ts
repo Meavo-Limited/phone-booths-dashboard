@@ -112,6 +112,9 @@ export type PhoneBoothCreate = {
     last_seen?: (string | null);
     state_id?: (number | null);
     working_hours: number;
+    workday_start: string;
+    workday_end: string;
+    working_days_mask: number;
     client_id?: (string | null);
     org_unit_id?: (string | null);
 };
@@ -123,11 +126,28 @@ export type PhoneBoothRead = {
     last_seen?: (string | null);
     state_id?: (number | null);
     working_hours: number;
+    workday_start: string;
+    workday_end: string;
+    working_days_mask: number;
     id: string;
     client_id: (string | null);
     org_unit_id: (string | null);
     created_at: string;
     updated_at: string;
+};
+
+/**
+ * Request model for bulk updating workday settings across all phone booths.
+ */
+export type PhoneBoothsBulkWorkdayUpdate = {
+    workday_start: string;
+    workday_end: string;
+    working_days_mask: number;
+};
+
+export type PhoneBoothsRead = {
+    data: Array<PhoneBoothRead>;
+    count: number;
 };
 
 export type PrivateUserCreate = {
@@ -283,6 +303,11 @@ export type ValidationError = {
     loc: Array<(string | number)>;
     msg: string;
     type: string;
+};
+
+export type WorkdayResponse = {
+    working_days: number;
+    total_hours: number;
 };
 
 export type BoothStatesReadBoothStatesResponse = (Array<BoothStateRead>);
@@ -451,6 +476,20 @@ export type OrgUnitTypesDeleteOrgUnitTypeData = {
 
 export type OrgUnitTypesDeleteOrgUnitTypeResponse = (Message);
 
+export type PhoneBoothsReadPhoneBoothsPaginatedData = {
+    clientId?: (string | null);
+    limit?: number;
+    skip?: number;
+};
+
+export type PhoneBoothsReadPhoneBoothsPaginatedResponse = (PhoneBoothsRead);
+
+export type PhoneBoothsCreatePhoneBoothData = {
+    requestBody: PhoneBoothCreate;
+};
+
+export type PhoneBoothsCreatePhoneBoothResponse = (PhoneBoothRead);
+
 export type PhoneBoothsReadPhoneBoothsData = {
     clientId?: (string | null);
     limit?: number;
@@ -459,12 +498,6 @@ export type PhoneBoothsReadPhoneBoothsData = {
 
 export type PhoneBoothsReadPhoneBoothsResponse = (Array<PhoneBoothRead>);
 
-export type PhoneBoothsCreatePhoneBoothData = {
-    requestBody: PhoneBoothCreate;
-};
-
-export type PhoneBoothsCreatePhoneBoothResponse = (PhoneBoothRead);
-
 export type PhoneBoothsReadBusyPhoneBoothsData = {
     clientId?: (string | null);
     limit?: number;
@@ -472,6 +505,16 @@ export type PhoneBoothsReadBusyPhoneBoothsData = {
 };
 
 export type PhoneBoothsReadBusyPhoneBoothsResponse = (Array<PhoneBoothRead>);
+
+export type PhoneBoothsCalculateWorkingTimeData = {
+    endDate: string;
+    startDate: string;
+    workdayEnd: string;
+    workdaysMask: number;
+    workdayStart: string;
+};
+
+export type PhoneBoothsCalculateWorkingTimeResponse = (WorkdayResponse);
 
 export type PhoneBoothsReadPhoneBoothData = {
     id: string;
@@ -491,6 +534,14 @@ export type PhoneBoothsDeletePhoneBoothData = {
 };
 
 export type PhoneBoothsDeletePhoneBoothResponse = (Message);
+
+export type PhoneBoothsBulkUpdateWorkdaySettingsData = {
+    requestBody: PhoneBoothsBulkWorkdayUpdate;
+};
+
+export type PhoneBoothsBulkUpdateWorkdaySettingsResponse = ({
+    [key: string]: unknown;
+});
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;

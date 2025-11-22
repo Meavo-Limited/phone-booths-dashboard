@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, time, date
 from typing import Optional
 
+from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 
@@ -14,6 +15,9 @@ class PhoneBoothBase(SQLModel):
     last_seen: Optional[datetime] = None
     state_id: Optional[int] = 0
     working_hours: int
+    workday_start: time
+    workday_end: time
+    working_days_mask: int
 
 
 class PhoneBooth(PhoneBoothBase, table=True):
@@ -30,6 +34,9 @@ class PhoneBooth(PhoneBoothBase, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     working_hours: int = Field(default=8)
+    workday_start: time = Field(default=time(9, 0))
+    workday_end: time = Field(default=time(17, 0))
+    working_days_mask: int = Field(default=31)
 
 
 class PhoneBoothCreate(PhoneBoothBase):
@@ -43,3 +50,18 @@ class PhoneBoothRead(PhoneBoothBase):
     org_unit_id: Optional[uuid.UUID]
     created_at: datetime
     updated_at: datetime
+
+class PhoneBoothsRead(SQLModel):
+    data: list[PhoneBoothRead]
+    count: int
+
+class WorkdayResponse(BaseModel):
+    working_days: int
+    total_hours: int
+
+
+class PhoneBoothsBulkWorkdayUpdate(SQLModel):
+    """Request model for bulk updating workday settings across all phone booths."""
+    workday_start: time
+    workday_end: time
+    working_days_mask: int

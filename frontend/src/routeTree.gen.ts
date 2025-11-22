@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutPhoneBoothsRouteImport } from './routes/_layout/phone-booths'
 import { Route as LayoutMqttItemsRouteImport } from './routes/_layout/mqtt-items'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBoothCalendarRouteImport } from './routes/_layout/booth-calendar'
@@ -55,6 +56,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutPhoneBoothsRoute = LayoutPhoneBoothsRouteImport.update({
+  id: '/phone-booths',
+  path: '/phone-booths',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutMqttItemsRoute = LayoutMqttItemsRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/booth-calendar': typeof LayoutBoothCalendarRoute
   '/items': typeof LayoutItemsRoute
   '/mqtt-items': typeof LayoutMqttItemsRoute
+  '/phone-booths': typeof LayoutPhoneBoothsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/booth-calendar': typeof LayoutBoothCalendarRoute
   '/items': typeof LayoutItemsRoute
   '/mqtt-items': typeof LayoutMqttItemsRoute
+  '/phone-booths': typeof LayoutPhoneBoothsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/_layout/booth-calendar': typeof LayoutBoothCalendarRoute
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/mqtt-items': typeof LayoutMqttItemsRoute
+  '/_layout/phone-booths': typeof LayoutPhoneBoothsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/booth-calendar'
     | '/items'
     | '/mqtt-items'
+    | '/phone-booths'
     | '/settings'
     | '/'
     | '/usage-reports/charts'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/booth-calendar'
     | '/items'
     | '/mqtt-items'
+    | '/phone-booths'
     | '/settings'
     | '/'
     | '/usage-reports/charts'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_layout/booth-calendar'
     | '/_layout/items'
     | '/_layout/mqtt-items'
+    | '/_layout/phone-booths'
     | '/_layout/settings'
     | '/_layout/'
     | '/_layout/usage-reports/charts'
@@ -238,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/phone-booths': {
+      id: '/_layout/phone-booths'
+      path: '/phone-booths'
+      fullPath: '/phone-booths'
+      preLoaderRoute: typeof LayoutPhoneBoothsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/mqtt-items': {
       id: '/_layout/mqtt-items'
       path: '/mqtt-items'
@@ -288,6 +307,7 @@ interface LayoutRouteChildren {
   LayoutBoothCalendarRoute: typeof LayoutBoothCalendarRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutMqttItemsRoute: typeof LayoutMqttItemsRoute
+  LayoutPhoneBoothsRoute: typeof LayoutPhoneBoothsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutUsageReportsChartsRoute: typeof LayoutUsageReportsChartsRoute
@@ -299,6 +319,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutBoothCalendarRoute: LayoutBoothCalendarRoute,
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutMqttItemsRoute: LayoutMqttItemsRoute,
+  LayoutPhoneBoothsRoute: LayoutPhoneBoothsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutUsageReportsChartsRoute: LayoutUsageReportsChartsRoute,

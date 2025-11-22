@@ -552,6 +552,20 @@ export const PhoneBoothCreateSchema = {
             type: 'integer',
             title: 'Working Hours'
         },
+        workday_start: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday Start'
+        },
+        workday_end: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday End'
+        },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        },
         client_id: {
             anyOf: [
                 {
@@ -578,7 +592,7 @@ export const PhoneBoothCreateSchema = {
         }
     },
     type: 'object',
-    required: ['name', 'serial_number', 'working_hours'],
+    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end', 'working_days_mask'],
     title: 'PhoneBoothCreate'
 } as const;
 
@@ -631,6 +645,20 @@ export const PhoneBoothReadSchema = {
             type: 'integer',
             title: 'Working Hours'
         },
+        workday_start: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday Start'
+        },
+        workday_end: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday End'
+        },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        },
         id: {
             type: 'string',
             format: 'uuid',
@@ -672,8 +700,50 @@ export const PhoneBoothReadSchema = {
         }
     },
     type: 'object',
-    required: ['name', 'serial_number', 'working_hours', 'id', 'client_id', 'org_unit_id', 'created_at', 'updated_at'],
+    required: ['name', 'serial_number', 'working_hours', 'workday_start', 'workday_end', 'working_days_mask', 'id', 'client_id', 'org_unit_id', 'created_at', 'updated_at'],
     title: 'PhoneBoothRead'
+} as const;
+
+export const PhoneBoothsBulkWorkdayUpdateSchema = {
+    properties: {
+        workday_start: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday Start'
+        },
+        workday_end: {
+            type: 'string',
+            format: 'time',
+            title: 'Workday End'
+        },
+        working_days_mask: {
+            type: 'integer',
+            title: 'Working Days Mask'
+        }
+    },
+    type: 'object',
+    required: ['workday_start', 'workday_end', 'working_days_mask'],
+    title: 'PhoneBoothsBulkWorkdayUpdate',
+    description: 'Request model for bulk updating workday settings across all phone booths.'
+} as const;
+
+export const PhoneBoothsReadSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/PhoneBoothRead'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'PhoneBoothsRead'
 } as const;
 
 export const PrivateUserCreateSchema = {
@@ -1491,4 +1561,20 @@ export const ValidationErrorSchema = {
     type: 'object',
     required: ['loc', 'msg', 'type'],
     title: 'ValidationError'
+} as const;
+
+export const WorkdayResponseSchema = {
+    properties: {
+        working_days: {
+            type: 'integer',
+            title: 'Working Days'
+        },
+        total_hours: {
+            type: 'integer',
+            title: 'Total Hours'
+        }
+    },
+    type: 'object',
+    required: ['working_days', 'total_hours'],
+    title: 'WorkdayResponse'
 } as const;

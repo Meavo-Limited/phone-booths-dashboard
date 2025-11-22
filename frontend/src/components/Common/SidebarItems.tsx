@@ -12,6 +12,7 @@ const items = [
   { icon: FiBriefcase, title: "Items", path: "/items" },
   { icon: FiBriefcase, title: "MQTT Items", path: "/mqtt-items" },
   { icon: FiCalendar, title: "Booth Calendar", path: "/booth-calendar" },
+  { icon: FiSettings, title: "Phone Booths", path: "/phone-booths" },
   { icon: FiSettings, title: "User Settings", path: "/settings" },
 ]
 
