@@ -38,3 +38,13 @@ class UsageSessionRead(UsageSessionBase):
     client_id: uuid.UUID
     org_unit_id: uuid.UUID
     created_at: datetime
+
+class HourlyUtilizationItem(SQLModel):
+    time: str                # e.g. "08:00"
+    utilization: float       # e.g. 0.20
+
+
+class HourlyUtilizationResponse(SQLModel):
+    workday_start: str       # "08:00"
+    workday_end: str         # "19:00"
+    hours: list[HourlyUtilizationItem]
