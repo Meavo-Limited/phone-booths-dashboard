@@ -39,6 +39,17 @@ export type ClientRead = {
     updated_at: string;
 };
 
+export type HourlyUtilizationItem = {
+    time: string;
+    utilization: number;
+};
+
+export type HourlyUtilizationResponse = {
+    workday_start: string;
+    workday_end: string;
+    hours: Array<HourlyUtilizationItem>;
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
@@ -640,6 +651,23 @@ export type UsageSessionsCreateUsageSessionData = {
 };
 
 export type UsageSessionsCreateUsageSessionResponse = (UsageSessionRead);
+
+export type UsageSessionsHourlyUtilizationData = {
+    /**
+     * Comma-separated list of booth UUIDs
+     */
+    boothIds: string;
+    /**
+     * Inclusive end date YYYY-MM-DD
+     */
+    endDate: string;
+    /**
+     * Inclusive start date YYYY-MM-DD
+     */
+    startDate: string;
+};
+
+export type UsageSessionsHourlyUtilizationResponse = (HourlyUtilizationResponse);
 
 export type UsageSessionsReadUsageSessionData = {
     id: string;

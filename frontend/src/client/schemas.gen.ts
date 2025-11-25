@@ -189,6 +189,45 @@ export const HTTPValidationErrorSchema = {
     title: 'HTTPValidationError'
 } as const;
 
+export const HourlyUtilizationItemSchema = {
+    properties: {
+        time: {
+            type: 'string',
+            title: 'Time'
+        },
+        utilization: {
+            type: 'number',
+            title: 'Utilization'
+        }
+    },
+    type: 'object',
+    required: ['time', 'utilization'],
+    title: 'HourlyUtilizationItem'
+} as const;
+
+export const HourlyUtilizationResponseSchema = {
+    properties: {
+        workday_start: {
+            type: 'string',
+            title: 'Workday Start'
+        },
+        workday_end: {
+            type: 'string',
+            title: 'Workday End'
+        },
+        hours: {
+            items: {
+                '$ref': '#/components/schemas/HourlyUtilizationItem'
+            },
+            type: 'array',
+            title: 'Hours'
+        }
+    },
+    type: 'object',
+    required: ['workday_start', 'workday_end', 'hours'],
+    title: 'HourlyUtilizationResponse'
+} as const;
+
 export const ItemCreateSchema = {
     properties: {
         title: {

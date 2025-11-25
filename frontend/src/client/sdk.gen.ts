@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsPaginatedData, PhoneBoothsReadPhoneBoothsPaginatedResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PhoneBoothsBulkUpdateWorkdaySettingsData, PhoneBoothsBulkUpdateWorkdaySettingsResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsPaginatedData, PhoneBoothsReadPhoneBoothsPaginatedResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PhoneBoothsBulkUpdateWorkdaySettingsData, PhoneBoothsBulkUpdateWorkdaySettingsResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsHourlyUtilizationData, UsageSessionsHourlyUtilizationResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class BoothStatesService {
     /**
@@ -788,8 +788,8 @@ export class PhoneBoothsService {
     
     /**
      * Bulk Update Workday Settings
-     * Bulk update workday settings (start time, end time, and working days mask) for all phone booths.
-     * Superusers can update all booths; regular users can only update booths in their client.
+     * Bulk update workday settings (start time, end time, working days mask, and derived working_hours)
+     * for all phone booths.
      * @param data The data for the request.
      * @param data.requestBody
      * @returns unknown Successful Response
@@ -1141,6 +1141,39 @@ export class UsageSessionsService {
             url: '/api/v1/usage-sessions/',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Hourly Utilization
+     * Returns hourly utilization % for the selected booths across the given period.
+     *
+     * Assumptions / behavior:
+     * - booth_ids: comma-separated UUIDs (e.g. "id1,id2,...").
+     * - start_date / end_date are inclusive and are dates (no times).
+     * - All booths must share the same workday_start and workday_end (otherwise 400).
+     * - Timezones are ignored for MVP (timestamps are used as stored).
+     * - For each hour label (e.g. "08:00"), we sum usage seconds across ALL days in the period
+     * and normalize by (#booths * 3600 * number_of_days).
+     * @param data The data for the request.
+     * @param data.boothIds Comma-separated list of booth UUIDs
+     * @param data.startDate Inclusive start date YYYY-MM-DD
+     * @param data.endDate Inclusive end date YYYY-MM-DD
+     * @returns HourlyUtilizationResponse Successful Response
+     * @throws ApiError
+     */
+    public static hourlyUtilization(data: UsageSessionsHourlyUtilizationData): CancelablePromise<UsageSessionsHourlyUtilizationResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/usage-sessions/hourly-utilization',
+            query: {
+                booth_ids: data.boothIds,
+                start_date: data.startDate,
+                end_date: data.endDate
+            },
             errors: {
                 422: 'Validation Error'
             }
