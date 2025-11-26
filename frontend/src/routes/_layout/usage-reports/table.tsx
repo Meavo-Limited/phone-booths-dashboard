@@ -10,6 +10,8 @@ import { RangeDatepicker } from "chakra-dayzed-datepicker"
 import PhoneBoothTreeFilter from "@/components/Common/PhoneBoothFilterTree"
 import { useUsageReportsData } from "@/hooks/useUsageReportsData"
 import { UsageTable } from "@/components/UsageReports/UsageTable"
+import { HourlyUtilizationContainer } from "@/components/UsageReports/HourlyUtilizationChart"
+
 
 export const Route = createFileRoute("/_layout/usage-reports/table")({
   component: UsageReportsTablePage,
@@ -20,13 +22,33 @@ function UsageReportsTablePage() {
   const today = new Date()
   const sevenDaysAgo = new Date()
   sevenDaysAgo.setDate(today.getDate() - 6)
-  const [selectedDates, setSelectedDates] = useState<Date[]>([sevenDaysAgo, today])
+  const [selectedDates, setSelectedDates] = useState<Date[]>([
+    sevenDaysAgo,
+    today,
+  ])
 
-  const { chartData, boothIds, boothMap, isLoading, isError, error } =
-    useUsageReportsData(
-      checkedItems,
-      selectedDates.length === 2 ? [selectedDates[0], selectedDates[1]] : undefined
-    )
+  const {
+    chartData,
+    boothIds,
+    boothMap,
+    isLoading,
+    isError,
+    error,
+  } = useUsageReportsData(
+    checkedItems,
+    selectedDates.length === 2
+      ? [selectedDates[0], selectedDates[1]]
+      : undefined
+  )
+
+  const startStr =
+    selectedDates.length === 2
+      ? selectedDates[0].toISOString().slice(0, 10)
+      : undefined
+  const endStr =
+    selectedDates.length === 2
+      ? selectedDates[1].toISOString().slice(0, 10)
+      : undefined
 
   return (
     <Container maxW="full" pt={12}>
@@ -53,6 +75,15 @@ function UsageReportsTablePage() {
           boothIds={boothIds}
           boothMap={boothMap}
           selectedDates={selectedDates}
+        />
+      )}
+
+      {/* ⬇️ ADD HOURLY UTILIZATION CHART HERE */}
+      {boothIds.length > 0 && startStr && endStr && (
+        <HourlyUtilizationContainer
+          boothIds={boothIds}
+          startDate={startStr}
+          endDate={endStr}
         />
       )}
     </Container>

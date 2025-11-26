@@ -12,6 +12,7 @@ import PhoneBoothTreeFilter from "@/components/Common/PhoneBoothFilterTree"
 import { useUsageReportsData } from "@/hooks/useUsageReportsData"
 import { UsageLineChart } from "@/components/UsageReports/UsageLineChart"
 import { UsageBarChart } from "@/components/UsageReports/UsageBarChart"
+import { UsageCompositeChart } from "@/components/UsageReports/TotalHoursAndAvgPerBooth"
 
 export const Route = createFileRoute("/_layout/usage-reports/charts")({
   component: UsageReportsChartsPage,
@@ -56,6 +57,11 @@ function UsageReportsChartsPage() {
             data={chartData}
             boothIds={boothIds}
             boothMap={boothMap}
+          />
+
+          <UsageCompositeChart
+            data={chartData}
+            boothIds={boothIds}
           />
         </Stack>
       )}
