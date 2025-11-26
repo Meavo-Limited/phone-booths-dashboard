@@ -175,6 +175,30 @@ export const ClientReadSchema = {
     title: 'ClientRead'
 } as const;
 
+export const DashboardStatsResponseSchema = {
+    properties: {
+        total_booths: {
+            type: 'integer',
+            title: 'Total Booths'
+        },
+        booths_in_use: {
+            type: 'integer',
+            title: 'Booths In Use'
+        },
+        usage_rate: {
+            type: 'number',
+            title: 'Usage Rate'
+        },
+        time_at_max_capacity: {
+            type: 'string',
+            title: 'Time At Max Capacity'
+        }
+    },
+    type: 'object',
+    required: ['total_booths', 'booths_in_use', 'usage_rate', 'time_at_max_capacity'],
+    title: 'DashboardStatsResponse'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {

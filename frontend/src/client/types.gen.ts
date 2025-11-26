@@ -39,6 +39,13 @@ export type ClientRead = {
     updated_at: string;
 };
 
+export type DashboardStatsResponse = {
+    total_booths: number;
+    booths_in_use: number;
+    usage_rate: number;
+    time_at_max_capacity: string;
+};
+
 export type HourlyUtilizationItem = {
     time: string;
     utilization: number;
@@ -374,6 +381,8 @@ export type ClientsDeleteClientData = {
 };
 
 export type ClientsDeleteClientResponse = (Message);
+
+export type DashboardDashboardStatsResponse = (DashboardStatsResponse);
 
 export type ItemsReadItemsData = {
     limit?: number;
