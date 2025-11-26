@@ -1171,6 +1171,29 @@ export const UpdatePasswordSchema = {
     title: 'UpdatePassword'
 } as const;
 
+export const UsageReportDaySchema = {
+    properties: {
+        day: {
+            type: 'string',
+            title: 'Day'
+        },
+        total_hours: {
+            type: 'number',
+            title: 'Total Hours'
+        },
+        booths: {
+            additionalProperties: {
+                type: 'number'
+            },
+            type: 'object',
+            title: 'Booths'
+        }
+    },
+    type: 'object',
+    required: ['day', 'total_hours', 'booths'],
+    title: 'UsageReportDay'
+} as const;
+
 export const UsageSessionCreateSchema = {
     properties: {
         start_time: {

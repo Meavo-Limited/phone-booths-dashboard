@@ -14,14 +14,19 @@ import {
     CartesianGrid,
 } from "recharts"
 
+interface BoothInfo {
+    name: string
+    workingHours: number
+}
 interface Props {
     data: any[]
-    boothIds: string[]
+    boothMap: Record<string, BoothInfo>
 }
 
-export function UsageCompositeChart({ data, boothIds }: Props) {
+export function UsageCompositeChart({ data, boothMap }: Props) {
     if (!data.length) return null
 
+    const boothIds = Object.keys(boothMap)
     const boothCount = boothIds.length || 1
 
     // Transform chartData → totals + avg per day
