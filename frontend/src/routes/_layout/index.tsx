@@ -106,7 +106,7 @@ function Dashboard() {
           label="Time at Max Capacity"
           value={time_at_max_capacity}
           color="orange.500"
-          helper="This week"
+          helper="Last 7 days"
         />
       </SimpleGrid>
     </Container>

@@ -66,14 +66,14 @@ function UsageReportsChartsPage() {
 
       {flattenedChartData.length > 0 && (
         <Stack gap="10" mt={8}>
-          <UsageLineChart data={flattenedChartData} />
-
-          <UsageBarChart
+          <UsageCompositeChart
             data={flattenedChartData}
             boothMap={boothMap}
           />
 
-          <UsageCompositeChart
+          <UsageLineChart data={flattenedChartData} />
+
+          <UsageBarChart
             data={flattenedChartData}
             boothMap={boothMap}
           />
