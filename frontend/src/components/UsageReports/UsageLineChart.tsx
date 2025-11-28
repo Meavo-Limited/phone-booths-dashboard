@@ -29,7 +29,7 @@ export function UsageLineChart({ data }: Props) {
           <Legend />
           <Line
             type="monotone"
-            dataKey="totalHours"
+            dataKey="total_hours"
             stroke="#3182ce"
             strokeWidth={2}
             dot={{ r: 3 }}

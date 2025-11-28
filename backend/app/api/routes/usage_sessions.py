@@ -9,6 +9,7 @@ from app.api.deps import CurrentUser, SessionDep
 from app.models.usage_sessions import HourlyUtilizationResponse, UsageSession, UsageSessionCreate, UsageSessionRead
 from app.models.general_models import Message
 from app.models.phone_booths import PhoneBooth
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/usage-sessions", tags=["usage_sessions"]) 
 
@@ -173,6 +174,131 @@ def hourly_utilization(
         workday_end=workday_end.strftime("%H:%M"),
         hours=hours_out,
     )
+
+
+
+class UsageReportDay(BaseModel):
+    day: str
+    total_hours: float
+    booths: dict[str, float]  # booth_id -> hours
+
+
+@router.get("/charts", response_model=List[UsageReportDay])
+def usage_reports_charts(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    booth_ids: str | None = Query(
+        None,
+        description="Comma-separated booth UUIDs. If empty: fetch all booths for current user."
+    ),
+    start_date: date = Query(..., description="Inclusive start date YYYY-MM-DD"),
+    end_date: date = Query(..., description="Inclusive end date YYYY-MM-DD"),
+):
+    """
+    Returns precomputed usage per day per booth and total daily hours.
+    If booth_ids is empty, automatically loads all booths accessible to the user.
+    """
+
+    # ---------------------------------------------------------------------
+    # 1. AUTO-LOAD BOOTHS WHEN booth_ids IS EMPTY
+    # ---------------------------------------------------------------------
+    raw_ids = (booth_ids or "").strip()
+
+    if raw_ids == "":
+        # Auto-select all booths for this user
+        if current_user.is_superuser:
+            stmt = select(PhoneBooth)
+        else:
+            if not current_user.client_id:
+                return []
+            stmt = select(PhoneBooth).where(PhoneBooth.client_id == current_user.client_id)
+
+        all_booths = session.exec(stmt).all()
+        booth_uuid_list = [b.id for b in all_booths]
+
+        if not booth_uuid_list:
+            return []  # no booths → no data
+
+    else:
+        # Parse provided booth_ids
+        try:
+            booth_uuid_list = [
+                uuid.UUID(x.strip()) for x in raw_ids.split(",") if x.strip()
+            ]
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid booth_ids format")
+
+        if not booth_uuid_list:
+            raise HTTPException(status_code=400, detail="At least one booth_id is required")
+
+        # Permission-scoped validation
+        stmt = select(PhoneBooth).where(PhoneBooth.id.in_(booth_uuid_list))
+        if not current_user.is_superuser:
+            stmt = stmt.where(PhoneBooth.client_id == current_user.client_id)
+
+        booths = session.exec(stmt).all()
+
+        if len(booths) != len(booth_uuid_list):
+            raise HTTPException(
+                status_code=404,
+                detail="One or more booths not found or forbidden"
+            )
+
+    # ---------------------------------------------------------------------
+    # Rest of the existing logic continues unchanged
+    # ---------------------------------------------------------------------
+
+    if end_date < start_date:
+        raise HTTPException(status_code=400, detail="end_date must be >= start_date")
+
+    # Build day list
+    day_list = []
+    cur = start_date
+    while cur <= end_date:
+        day_list.append(cur)
+        cur += timedelta(days=1)
+
+    # Load sessions
+    stmt = (
+        select(UsageSession)
+        .where(UsageSession.phone_booth_id.in_(booth_uuid_list))
+        .where(UsageSession.start_time >= datetime.combine(start_date, time.min))
+        .where(UsageSession.start_time <= datetime.combine(end_date, time.max))
+    )
+    sessions = session.exec(stmt).all()
+
+    # Initialize aggregation store
+    usage_by_day: dict[str, dict[str, float]] = {
+        d.isoformat(): {} for d in day_list
+    }
+
+    # Process sessions
+    for s in sessions:
+        booth_id = str(s.phone_booth_id)
+        hours = (s.duration_seconds or 0) / 3600
+        day_key = s.start_time.date().isoformat()
+
+        if day_key in usage_by_day:
+            usage_by_day[day_key][booth_id] = usage_by_day[day_key].get(booth_id, 0) + hours
+
+    # Build response
+    output: List[UsageReportDay] = []
+
+    for d in day_list:
+        day_str = d.isoformat()
+        booths_dict = usage_by_day[day_str]
+        total_hours = sum(booths_dict.values())
+
+        output.append(
+            UsageReportDay(
+                day=day_str,
+                total_hours=total_hours,
+                booths=booths_dict
+            )
+        )
+
+    return output
 
 @router.get("/{id}", response_model=UsageSessionRead)
 def read_usage_session(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:

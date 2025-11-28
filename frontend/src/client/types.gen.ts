@@ -249,6 +249,14 @@ export type UpdatePassword = {
     new_password: string;
 };
 
+export type UsageReportDay = {
+    day: string;
+    total_hours: number;
+    booths: {
+        [key: string]: (number);
+    };
+};
+
 export type UsageSessionCreate = {
     start_time: string;
     end_time?: (string | null);
@@ -526,6 +534,12 @@ export type PhoneBoothsReadBusyPhoneBoothsData = {
 
 export type PhoneBoothsReadBusyPhoneBoothsResponse = (Array<PhoneBoothRead>);
 
+export type PhoneBoothsReadPhoneBoothsByIdsData = {
+    boothIds?: (string | null);
+};
+
+export type PhoneBoothsReadPhoneBoothsByIdsResponse = (Array<PhoneBoothRead>);
+
 export type PhoneBoothsCalculateWorkingTimeData = {
     endDate: string;
     startDate: string;
@@ -677,6 +691,23 @@ export type UsageSessionsHourlyUtilizationData = {
 };
 
 export type UsageSessionsHourlyUtilizationResponse = (HourlyUtilizationResponse);
+
+export type UsageSessionsUsageReportsChartsData = {
+    /**
+     * Comma-separated booth UUIDs. If empty: fetch all booths for current user.
+     */
+    boothIds?: (string | null);
+    /**
+     * Inclusive end date YYYY-MM-DD
+     */
+    endDate: string;
+    /**
+     * Inclusive start date YYYY-MM-DD
+     */
+    startDate: string;
+};
+
+export type UsageSessionsUsageReportsChartsResponse = (Array<UsageReportDay>);
 
 export type UsageSessionsReadUsageSessionData = {
     id: string;

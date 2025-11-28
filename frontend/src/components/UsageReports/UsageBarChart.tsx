@@ -22,15 +22,17 @@ interface BoothInfo {
 
 interface Props {
   data: any[]
-  boothIds: string[]
   boothMap: Record<string, BoothInfo>
 }
 
-export function UsageBarChart({ data, boothIds, boothMap }: Props) {
-  // 🗓️ Helper for day of week label
+export function UsageBarChart({ data, boothMap }: Props) {
+  // List of booth IDs from the map
+  const boothKeys = Object.keys(boothMap)
+
+
   const formatDayOfWeek = (isoDate: string) => {
     const date = new Date(isoDate)
-    return date.toLocaleDateString(undefined, { weekday: "long" }) // e.g. "Monday"
+    return date.toLocaleDateString(undefined, { weekday: "long" })
   }
 
   return (
@@ -38,11 +40,13 @@ export function UsageBarChart({ data, boothIds, boothMap }: Props) {
       <Heading size="md" mb={3}>
         Daily Busy Hours per Booth
       </Heading>
+
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="day" />
           <YAxis />
+
           <Tooltip
             formatter={(value, name) => [
               `${value} h`,
@@ -53,8 +57,10 @@ export function UsageBarChart({ data, boothIds, boothMap }: Props) {
               return `${day} (${weekday})`
             }}
           />
+
           <Legend />
-          {boothIds.map((boothId, index) => (
+
+          {boothKeys.map((boothId, index) => (
             <Bar
               key={boothId}
               dataKey={boothId}
