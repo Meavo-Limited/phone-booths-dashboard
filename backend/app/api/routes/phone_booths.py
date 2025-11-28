@@ -102,6 +102,70 @@ def read_busy_phone_booths(
     
     return booths
 
+@router.get("/by-ids", response_model=List[PhoneBoothRead])
+def read_phone_booths_by_ids(
+    session: SessionDep,
+    current_user: CurrentUser,
+    booth_ids: Optional[str] = None,
+) -> Any:
+    """
+    Returns only the phone booths corresponding to the given comma-separated booth_id list.
+    If booth_ids is empty or None → return all booths accessible to the current user.
+    """
+
+    # -----------------------------------------
+    # 1. Parse booth_ids OR auto-load all booths
+    # -----------------------------------------
+    raw = (booth_ids or "").strip()
+
+    logger.info(f"booths by IDs: {booth_ids}")
+    
+    if raw == "":
+        # Auto-select all booths for this user
+        if current_user.is_superuser:
+            stmt = select(PhoneBooth)
+        else:
+            if not current_user.client_id:
+                return []
+            stmt = select(PhoneBooth).where(
+                PhoneBooth.client_id == current_user.client_id
+            )
+        return session.exec(stmt).all()
+
+    # booth_ids provided → parse them
+    try:
+        booth_uuid_list = [
+            uuid.UUID(x.strip()) for x in raw.split(",") if x.strip()
+        ]
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid booth_ids format")
+
+    if not booth_uuid_list:
+        raise HTTPException(status_code=400, detail="At least one booth_id is required")
+
+    # -----------------------------------------
+    # 2. Permission-scoped booth lookup
+    # -----------------------------------------
+    stmt = select(PhoneBooth).where(PhoneBooth.id.in_(booth_uuid_list))
+
+    if not current_user.is_superuser:
+        stmt = stmt.where(PhoneBooth.client_id == current_user.client_id)
+
+    logger.info(f"booths by IDs: {booth_uuid_list}\nSELECT STATEMENT: {stmt}")
+    booths = session.exec(stmt).all()
+
+    # -----------------------------------------
+    # 3. Ensure no missing or forbidden booths
+    # -----------------------------------------
+    if len(booths) != len(booth_uuid_list):
+        raise HTTPException(
+            status_code=404,
+            detail="One or more booths not found or forbidden"
+        )
+
+    return booths
+
+
 @router.get("/calculate-working-time", response_model=WorkdayResponse)
 def calculate_working_time(start_date: date, end_date: date, workday_start: time, workday_end: time, workdays_mask: int) -> Any:
     

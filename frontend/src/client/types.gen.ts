@@ -534,6 +534,12 @@ export type PhoneBoothsReadBusyPhoneBoothsData = {
 
 export type PhoneBoothsReadBusyPhoneBoothsResponse = (Array<PhoneBoothRead>);
 
+export type PhoneBoothsReadPhoneBoothsByIdsData = {
+    boothIds?: (string | null);
+};
+
+export type PhoneBoothsReadPhoneBoothsByIdsResponse = (Array<PhoneBoothRead>);
+
 export type PhoneBoothsCalculateWorkingTimeData = {
     endDate: string;
     startDate: string;
