@@ -85,7 +85,10 @@ def hourly_utilization(
     if end_hour < start_hour:
         raise HTTPException(status_code=400, detail="workday_end must be after workday_start")
 
-    hour_labels = [time(h, 0).strftime("%H:%M") for h in range(start_hour, end_hour + 1)]
+    hour_labels = [
+        f"{time(h, 0).strftime('%H:%M')} - {time(h + 1, 0).strftime('%H:%M')}"
+        for h in range(start_hour, end_hour)
+    ]
 
     # ---- date range bounds ----
     if end_date < start_date:
@@ -132,17 +135,16 @@ def hourly_utilization(
             day_work_end = datetime.combine(cur_day, workday_end) + timedelta(hours=0)  # end is hour start label inclusive
 
             # For each hour in the workday, compute overlapping seconds
-            for h in range(start_hour, end_hour + 1):
+            for h in range(start_hour, end_hour):
                 hour_start = datetime.combine(cur_day, time(h, 0))
                 hour_end = hour_start + timedelta(hours=1)
 
-                # Only consider hour within the workday: we already used start_hour..end_hour range
-                # Compute overlap between [start, end) and [hour_start, hour_end)
-                overlap_start = start if start > hour_start else hour_start
-                overlap_end = end if end < hour_end else hour_end
+                overlap_start = max(start, hour_start)
+                overlap_end = min(end, hour_end)
                 overlap = (overlap_end - overlap_start).total_seconds()
+                
                 if overlap > 0:
-                    label = time(h, 0).strftime("%H:%M")
+                    label = f"{time(h, 0).strftime('%H:%M')} - {time(h+1, 0).strftime('%H:%M')}"
                     used_seconds_by_hour[label] += overlap
 
             cur_day = cur_day + timedelta(days=1)
