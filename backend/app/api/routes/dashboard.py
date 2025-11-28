@@ -8,6 +8,11 @@ from app.api.deps import SessionDep, CurrentUser
 from app.models.phone_booths import PhoneBooth
 from app.models.booth_states import BoothState
 from app.models.usage_sessions import UsageSession
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -41,10 +46,18 @@ def dashboard_stats(session: SessionDep, current_user: CurrentUser) -> Any:
             UsageSession.start_time >= start_date,
             UsageSession.start_time <= end_date,
         )
+        
+        logger.info(f"Dashboard query start_data: {start_date}, end_date: {end_date}")
         sessions = session.exec(sessions_query).all()
+        
 
         total_seconds_used = sum(s.duration_seconds or 0 for s in sessions)
-        total_possible_seconds = sum(b.working_hours * 3600 for b in booths)
+        logger.info(f"Total seconds used in last 7 days: {total_seconds_used}")
+        total_possible_seconds = 0
+        for b in booths:
+            working_days = count_working_days_in_range(start_date, end_date, b.working_days_mask)
+            total_possible_seconds += b.working_hours * 3600 * working_days
+        logger.info(f"Total possible seconds in last 7 days: {total_possible_seconds}")
         usage_rate = (total_seconds_used / total_possible_seconds) * 100 if total_possible_seconds else 0
     else:
         usage_rate = 0
@@ -75,3 +88,17 @@ def dashboard_stats(session: SessionDep, current_user: CurrentUser) -> Any:
         usage_rate=round(usage_rate, 2),
         time_at_max_capacity=time_at_max_str,
     )
+
+def count_working_days_in_range(start: datetime, end: datetime, bitmask: int) -> int:
+    current = start.date()
+    end_date = end.date()
+    count = 0
+    
+    while current <= end_date:
+        weekday = current.weekday()  # Monday = 0 ... Sunday = 6
+        if bitmask & (1 << weekday):
+            count += 1
+        current += timedelta(days=1)
+    
+    return count
+
