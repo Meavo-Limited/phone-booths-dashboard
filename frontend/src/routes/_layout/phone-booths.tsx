@@ -89,7 +89,7 @@ function PhoneBoothsPage() {
     const { page } = Route.useSearch()
     const navigate = useNavigate({ from: Route.fullPath })
 
-    const { data, isLoading, isPlaceholderData } = useQuery({
+    const { data, isLoading } = useQuery({
         ...getPhoneBooths({ page }),
         placeholderData: (prev) => prev,
     })
