@@ -88,7 +88,7 @@ export function UsageTable({ data, boothMap, selectedDates }: Props) {
       <Table.Root size="sm" variant="outline">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Client / Booth</Table.ColumnHeader>
+            <Table.ColumnHeader>Booth</Table.ColumnHeader>
             <Table.ColumnHeader>Working Days</Table.ColumnHeader>
             <Table.ColumnHeader>Hours/Day</Table.ColumnHeader>
             <Table.ColumnHeader>Usage (hrs)</Table.ColumnHeader>

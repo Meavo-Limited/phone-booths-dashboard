@@ -171,11 +171,13 @@ const PhoneBoothTreeFilter = ({ onCheckedChange }: PhoneBoothTreeFilterProps) =>
         rootNode,
     })
 
+    const allIds = collection.getValues();
+
     return (
         <TreeView.Root
             collection={collection}
             maxW="sm"
-            defaultCheckedValue={[]}
+            defaultCheckedValue={allIds}
             onCheckedChange={(details) => {
                 console.log("Checked in TreeView:", details.checkedValue)
                 onCheckedChange?.(details.checkedValue)
