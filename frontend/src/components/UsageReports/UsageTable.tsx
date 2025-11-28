@@ -1,16 +1,11 @@
 import { useMemo } from "react"
 import { Box, Heading, Table } from "@chakra-ui/react"
+import { PhoneBoothRead } from "@/client"
 
-interface BoothInfo {
-  name: string
-  workingHours: number
-  workingDaysMask: number
-}
 
 interface Props {
   data: any[]
-  boothIds: string[]
-  boothMap: Record<string, BoothInfo>
+  boothMap: Record<string, PhoneBoothRead>
   selectedDates: Date[]
 }
 
@@ -40,8 +35,10 @@ function countWorkingDaysInRange(start: Date, end: Date, mask: number): number {
   return count
 }
 
-export function UsageTable({ data, boothIds, boothMap, selectedDates }: Props) {
+export function UsageTable({ data, boothMap, selectedDates }: Props) {
   const summaryData = useMemo(() => {
+    const boothIds = Object.keys(boothMap)
+
     if (!data.length || !boothIds.length) return []
 
     const start =
@@ -53,8 +50,8 @@ export function UsageTable({ data, boothIds, boothMap, selectedDates }: Props) {
       const booth = boothMap[boothId]
       if (!booth) return null
 
-      const workingHours = booth.workingHours || 8
-      const mask = booth.workingDaysMask
+      const workingHours = booth.working_hours || 8
+      const mask = booth.working_days_mask
 
       const workingDaysCount = countWorkingDaysInRange(start, end, mask)
 
@@ -80,7 +77,7 @@ export function UsageTable({ data, boothIds, boothMap, selectedDates }: Props) {
         percentage,
       }
     }).filter(Boolean)
-  }, [data, boothIds, boothMap, selectedDates])
+  }, [data, boothMap, selectedDates])
 
   return (
     <Box mt={12}>

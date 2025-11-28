@@ -4,7 +4,6 @@ import { useMemo } from "react"
 
 export function useBoothCharts(boothIds: string[], dateRange: [Date, Date]) {
   const boothParam = boothIds.join(",")
-  console.log("Booth IDs Param:", boothParam)
 
   const startDate = dateRange[0].toISOString().split("T")[0]
   const endDate = dateRange[1].toISOString().split("T")[0]
@@ -20,7 +19,6 @@ export function useBoothCharts(boothIds: string[], dateRange: [Date, Date]) {
       })
   })
 
-  console.log("Booth IDs Param booths query:", boothParam)
   const { data: booths } = useQuery({
     queryKey: ["phoneBoothsByIds", boothParam],
     queryFn: () =>
@@ -29,8 +27,6 @@ export function useBoothCharts(boothIds: string[], dateRange: [Date, Date]) {
       })
   })
 
-  console.log("Booths Data:", booths)
-
   const boothMap = useMemo(() => {
     const m: Record<string, any> = {}
     booths?.forEach((b: any) => {
@@ -38,8 +34,6 @@ export function useBoothCharts(boothIds: string[], dateRange: [Date, Date]) {
     })
     return m
   }, [booths])
-
-  console.log("Booth Map:", boothMap)
 
   return {
     chart,
