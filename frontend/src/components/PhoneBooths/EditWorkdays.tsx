@@ -9,13 +9,18 @@ import {
   Stack,
   For,
 } from "@chakra-ui/react"
-import { Checkbox } from "@chakra-ui/react" // NEW API
+import { Checkbox } from "@chakra-ui/react"
+
+import { useEffect, useState } from "react"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
-import { type SubmitHandler, useForm } from "react-hook-form"
 import { FaPlus } from "react-icons/fa"
 
-import { type PhoneBoothsBulkWorkdayUpdate, PhoneBoothsService } from "@/client"
+import {
+  type PhoneBoothsBulkWorkdayUpdate,
+  type PhoneBoothRead,
+  PhoneBoothsService,
+} from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
@@ -40,26 +45,40 @@ const DAYS = [
   { label: "Sun", bit: 6 },
 ]
 
-const EditWorkdays = () => {
+export default function EditWorkdays({ booths }: { booths: PhoneBoothRead[] }) {
   const [isOpen, setIsOpen] = useState(false)
   const [mask, setMask] = useState(0)
 
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
 
-  const { register, handleSubmit, reset } =
-    useForm<PhoneBoothsBulkWorkdayUpdate>({
-      mode: "onBlur",
-      defaultValues: {
-        workday_start: "",
-        workday_end: "",
-        working_days_mask: 0,
-      },
-    })
+  const { register, handleSubmit, reset } = useForm<PhoneBoothsBulkWorkdayUpdate>({
+    mode: "onBlur",
+    defaultValues: {
+      workday_start: "",
+      workday_end: "",
+      working_days_mask: 0,
+    },
+  })
 
-  const toggleBit = (bit: number) => {
+  // Toggle checkbox bit
+  const toggleBit = (bit: number) =>
     setMask((prev) => prev ^ (1 << bit))
-  }
+
+  // ⬇️ Load booth[0] data when dialog opens
+  useEffect(() => {
+    if (isOpen && booths.length > 0) {
+      const first = booths[0]
+
+      reset({
+        workday_start: first.workday_start,
+        workday_end: first.workday_end,
+        working_days_mask: first.working_days_mask,
+      })
+
+      setMask(first.working_days_mask)
+    }
+  }, [isOpen, booths, reset])
 
   const mutation = useMutation({
     mutationFn: (data: PhoneBoothsBulkWorkdayUpdate) =>
@@ -83,12 +102,11 @@ const EditWorkdays = () => {
   return (
     <DialogRoot
       size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
       onOpenChange={({ open }) => setIsOpen(open)}
     >
       <DialogTrigger asChild>
-        <Button value="edit-workdays" my={4}>
+        <Button my={4}>
           <FaPlus fontSize="16px" />
           Edit All Workdays
         </Button>
@@ -101,26 +119,20 @@ const EditWorkdays = () => {
 
         <DialogBody>
           <VStack gap={4}>
-            {/* Workday Start */}
             <Field label="Workday Start">
               <Input type="time" {...register("workday_start")} />
             </Field>
 
-            {/* Workday End */}
             <Field label="Workday End">
               <Input type="time" {...register("workday_end")} />
             </Field>
 
-            {/* Working Days Selector */}
-            <Text alignSelf="flex-start" fontWeight="medium" mb={1}>
-              Working Days
-            </Text>
+            <Text fontWeight="medium">Working Days</Text>
             <HStack wrap="wrap" gap={3}>
               <For each={DAYS}>
                 {(day) => (
-                  <Stack align="flex-start" flex="1" key={day.label}>
+                  <Stack key={day.label}>
                     <Checkbox.Root
-                      key={day.bit}
                       checked={Boolean(mask & (1 << day.bit))}
                       onCheckedChange={() => toggleBit(day.bit)}
                     >
@@ -154,5 +166,3 @@ const EditWorkdays = () => {
     </DialogRoot>
   )
 }
-
-export default EditWorkdays
