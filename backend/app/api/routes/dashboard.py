@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from typing import Any
 from app.models.general_models import DashboardStatsResponse
 from fastapi import APIRouter, Depends, Query
@@ -41,9 +41,9 @@ def dashboard_stats(
     # Booths currently in use (state_id == 1)
     booths_in_use = sum(1 for b in booths if b.state_id == 1)
 
-    start_datetime = datetime.combine(start_date, datetime.min.time())
-    end_datetime = datetime.combine(end_date, datetime.max.time())
-    
+    start_datetime = datetime.combine(start_date, datetime.min.time()).replace(tzinfo=timezone.utc)
+    end_datetime = datetime.combine(end_date, datetime.max.time()).replace(tzinfo=timezone.utc)
+
     # Usage rate = sum(duration_seconds) / (working_hours * 3600 * number_of_booths)
     if booth_ids and total_booths > 0:
         sessions_query = select(UsageSession).where(
