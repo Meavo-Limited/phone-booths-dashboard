@@ -1,6 +1,6 @@
 import uuid
 from typing import Any, List
-from datetime import datetime, date, time, timedelta
+from datetime import datetime, date, time, timedelta, timezone
 
 from fastapi import APIRouter, HTTPException, status, Query
 from sqlmodel import select
@@ -96,8 +96,10 @@ def hourly_utilization(
 
     days = (end_date - start_date).days + 1
 
-    period_start_dt = datetime.combine(start_date, time.min)  # 00:00:00 on start_date
-    period_end_dt_exclusive = datetime.combine(end_date + timedelta(days=1), time.min)  # exclusive upper bound
+    period_start_dt = datetime.combine(start_date, time.min).replace(tzinfo=timezone.utc)
+    period_end_dt_exclusive = datetime.combine(
+        end_date + timedelta(days=1), time.min
+    ).replace(tzinfo=timezone.utc)
 
     # ---- load sessions for these booths that intersect the period ----
     # Condition: session.start_time < period_end AND (session.end_time IS NULL OR session.end_time > period_start)
@@ -131,12 +133,12 @@ def hourly_utilization(
         last_day = (end - timedelta(seconds=1)).date()  # inclusive last day
         while cur_day <= last_day:
             # day bounds in datetime
-            day_work_start = datetime.combine(cur_day, workday_start)
-            day_work_end = datetime.combine(cur_day, workday_end) + timedelta(hours=0)  # end is hour start label inclusive
-
+            day_work_start = datetime.combine(cur_day, workday_start).replace(tzinfo=timezone.utc)
+            day_work_end = datetime.combine(cur_day, workday_end).replace(tzinfo=timezone.utc)
+            
             # For each hour in the workday, compute overlapping seconds
             for h in range(start_hour, end_hour):
-                hour_start = datetime.combine(cur_day, time(h, 0))
+                hour_start = datetime.combine(cur_day, time(h, 0)).replace(tzinfo=timezone.utc)
                 hour_end = hour_start + timedelta(hours=1)
 
                 overlap_start = max(start, hour_start)

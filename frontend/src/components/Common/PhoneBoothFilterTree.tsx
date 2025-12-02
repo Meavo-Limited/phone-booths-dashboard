@@ -1,4 +1,8 @@
-import { ClientsService, OrgUnitsService, PhoneBoothsService } from "@/client"
+import {
+    ClientsService,
+    OrgUnitsService,
+    PhoneBoothsService,
+} from "@/client"
 import {
     Checkmark,
     TreeView,
@@ -74,7 +78,7 @@ function sortTree(node: Node): Node {
 // 🧩 Build hierarchy from clients, orgUnits, and booths
 function buildTree(clients: any[], orgUnits: any[], booths: any[]): Node {
     const orgUnitMap = new Map<string, Node>()
-
+    
     // Step 1. Create orgUnit nodes
     orgUnits.forEach((ou) => {
         orgUnitMap.set(ou.id, {
@@ -105,10 +109,13 @@ function buildTree(clients: any[], orgUnits: any[], booths: any[]): Node {
         })
     })
 
+    // Attach top-level orgUnits under clients
     orgUnits.forEach((ou) => {
         if (!ou.parent_id) {
-            const clientNode = clientMap.get(ou.client_id)
-            if (clientNode) clientNode.children!.push(orgUnitMap.get(ou.id)!)
+            const parentClient = clientMap.get(ou.client_id)
+            if (parentClient) {
+                parentClient.children!.push(orgUnitMap.get(ou.id)!)
+            }
         }
     })
 
@@ -136,15 +143,30 @@ function buildTree(clients: any[], orgUnits: any[], booths: any[]): Node {
     return sortTree(root)
 }
 
+// ⭐ Collect only LEAF NODE IDs (booths)
+function getLeafNodeIds(node: Node, list: string[] = []): string[] {
+    if (!node.children || node.children.length === 0) {
+        list.push(node.id)
+    } else {
+        node.children.forEach((child) => getLeafNodeIds(child, list))
+    }
+    return list
+}
+
 const PhoneBoothTreeFilter = ({ onCheckedChange }: PhoneBoothTreeFilterProps) => {
     const clientsQuery = useQuery(getClientsQuery())
     const orgUnitsQuery = useQuery(getOrgUnitsQuery())
     const boothsQuery = useQuery(getPhoneBoothsQuery())
 
     const isLoading =
-        clientsQuery.isLoading || orgUnitsQuery.isLoading || boothsQuery.isLoading
+        clientsQuery.isLoading ||
+        orgUnitsQuery.isLoading ||
+        boothsQuery.isLoading
+
     const hasError =
-        clientsQuery.isError || orgUnitsQuery.isError || boothsQuery.isError
+        clientsQuery.isError ||
+        orgUnitsQuery.isError ||
+        boothsQuery.isError
 
     if (isLoading) {
         return (
@@ -159,9 +181,9 @@ const PhoneBoothTreeFilter = ({ onCheckedChange }: PhoneBoothTreeFilterProps) =>
         return <Text color="red.500">Failed to load tree data.</Text>
     }
 
-    const clients = clientsQuery.data || []
-    const orgUnits = orgUnitsQuery.data || []
-    const booths = boothsQuery.data || []
+    const clients = clientsQuery.data ?? []
+    const orgUnits = orgUnitsQuery.data ?? []
+    const booths = boothsQuery.data ?? []
 
     const rootNode = buildTree(clients, orgUnits, booths)
 
@@ -171,15 +193,15 @@ const PhoneBoothTreeFilter = ({ onCheckedChange }: PhoneBoothTreeFilterProps) =>
         rootNode,
     })
 
-    const allIds = collection.getValues();
+    // ⭐ LEAF nodes = booths only
+    const defaultChecked = getLeafNodeIds(rootNode)
 
     return (
         <TreeView.Root
             collection={collection}
             maxW="sm"
-            defaultCheckedValue={allIds}
+            defaultCheckedValue={defaultChecked}
             onCheckedChange={(details) => {
-                console.log("Checked in TreeView:", details.checkedValue)
                 onCheckedChange?.(details.checkedValue)
             }}
         >
@@ -191,13 +213,17 @@ const PhoneBoothTreeFilter = ({ onCheckedChange }: PhoneBoothTreeFilterProps) =>
                             <TreeView.BranchControl role="none">
                                 <TreeNodeCheckbox />
                                 <LuFolder />
-                                <TreeView.BranchText>{node.name}</TreeView.BranchText>
+                                <TreeView.BranchText>
+                                    {node.name}
+                                </TreeView.BranchText>
                             </TreeView.BranchControl>
                         ) : (
                             <TreeView.Item>
                                 <TreeNodeCheckbox />
                                 <LuFile />
-                                <TreeView.ItemText>{node.name}</TreeView.ItemText>
+                                <TreeView.ItemText>
+                                    {node.name}
+                                </TreeView.ItemText>
                             </TreeView.Item>
                         )
                     }

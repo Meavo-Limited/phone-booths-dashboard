@@ -70,13 +70,12 @@ function UsageReportsChartsPage() {
             data={flattenedChartData}
             boothMap={boothMap}
           />
-
-          <UsageLineChart data={flattenedChartData} />
-
-          <UsageBarChart
+            <UsageBarChart
             data={flattenedChartData}
             boothMap={boothMap}
           />
+
+          <UsageLineChart data={flattenedChartData} />
         </Stack>
       )}
     </Container>
