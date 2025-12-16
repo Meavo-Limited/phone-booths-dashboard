@@ -390,6 +390,11 @@ export type ClientsDeleteClientData = {
 
 export type ClientsDeleteClientResponse = (Message);
 
+export type DashboardDashboardStatsData = {
+    endDate?: string;
+    startDate?: string;
+};
+
 export type DashboardDashboardStatsResponse = (DashboardStatsResponse);
 
 export type ItemsReadItemsData = {

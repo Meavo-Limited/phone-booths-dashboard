@@ -21,8 +21,8 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 def dashboard_stats(
     session: SessionDep, 
     current_user: CurrentUser,
-    start_date: date = date.today() - timedelta(days=7),
-    end_date: date = date.today(),
+    start_date: date = Query(default=date.today() - timedelta(days=7)),
+    end_date: date = Query(default=date.today()),
 ) -> Any:
     # Determine the base query for booths
     if current_user.is_superuser:
