@@ -27,21 +27,33 @@ function Dashboard() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        setLoading(true)
-        const res = await DashboardService.dashboardStats()
-        setStats(res)
-      } catch (err: any) {
-        console.error("Failed to load dashboard stats", err)
-        setError(err?.message || "Unknown error")
-      } finally {
-        setLoading(false)
-      }
-    }
+  async function fetchStats() {
+    try {
+      setLoading(true)
 
-    fetchStats()
-  }, [])
+      const end = new Date()
+      const start = new Date()
+      start.setDate(end.getDate() - 7)
+
+      const startDate = start.toISOString().slice(0, 10) // YYYY-MM-DD
+      const endDate = end.toISOString().slice(0, 10)
+
+      const res = await DashboardService.dashboardStats({
+        startDate,
+        endDate,
+      })
+
+      setStats(res)
+    } catch (err: any) {
+      console.error("Failed to load dashboard stats", err)
+      setError(err?.message || "Unknown error")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  fetchStats()
+}, [])
 
   if (loading)
     return (
