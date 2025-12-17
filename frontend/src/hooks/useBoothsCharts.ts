@@ -5,8 +5,8 @@ import { useMemo } from "react"
 export function useBoothCharts(boothIds: string[], dateRange: [Date, Date]) {
   const boothParam = boothIds.join(",")
 
-  const startDate = dateRange[0].toISOString().split("T")[0]
-  const endDate = dateRange[1].toISOString().split("T")[0]
+  const startDate = dateRange[0].toLocaleDateString("en-CA")
+  const endDate = dateRange[1].toLocaleDateString("en-CA")
 
   // ⬅️ FIXED: camelCase field names per OpenAPI client
   const { data: chart, isLoading, isError } = useQuery({
