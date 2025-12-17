@@ -20,9 +20,10 @@ import { Route as LayoutPhoneBoothsRouteImport } from './routes/_layout/phone-bo
 import { Route as LayoutMqttItemsRouteImport } from './routes/_layout/mqtt-items'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBoothCalendarRouteImport } from './routes/_layout/booth-calendar'
-import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 import { Route as LayoutUsageReportsTableRouteImport } from './routes/_layout/usage-reports/table'
 import { Route as LayoutUsageReportsChartsRouteImport } from './routes/_layout/usage-reports/charts'
+import { Route as LayoutAdminClientsRouteImport } from './routes/_layout/admin/clients'
+import { Route as LayoutAdminAdminRouteImport } from './routes/_layout/admin/admin'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -78,11 +79,6 @@ const LayoutBoothCalendarRoute = LayoutBoothCalendarRouteImport.update({
   path: '/booth-calendar',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutAdminRoute = LayoutAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => LayoutRoute,
-} as any)
 const LayoutUsageReportsTableRoute = LayoutUsageReportsTableRouteImport.update({
   id: '/usage-reports/table',
   path: '/usage-reports/table',
@@ -94,19 +90,30 @@ const LayoutUsageReportsChartsRoute =
     path: '/usage-reports/charts',
     getParentRoute: () => LayoutRoute,
   } as any)
+const LayoutAdminClientsRoute = LayoutAdminClientsRouteImport.update({
+  id: '/admin/clients',
+  path: '/admin/clients',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutAdminAdminRoute = LayoutAdminAdminRouteImport.update({
+  id: '/admin/admin',
+  path: '/admin/admin',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof LayoutAdminRoute
   '/booth-calendar': typeof LayoutBoothCalendarRoute
   '/items': typeof LayoutItemsRoute
   '/mqtt-items': typeof LayoutMqttItemsRoute
   '/phone-booths': typeof LayoutPhoneBoothsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/admin/admin': typeof LayoutAdminAdminRoute
+  '/admin/clients': typeof LayoutAdminClientsRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -115,13 +122,14 @@ export interface FileRoutesByTo {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof LayoutAdminRoute
   '/booth-calendar': typeof LayoutBoothCalendarRoute
   '/items': typeof LayoutItemsRoute
   '/mqtt-items': typeof LayoutMqttItemsRoute
   '/phone-booths': typeof LayoutPhoneBoothsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/admin/admin': typeof LayoutAdminAdminRoute
+  '/admin/clients': typeof LayoutAdminClientsRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -132,13 +140,14 @@ export interface FileRoutesById {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/booth-calendar': typeof LayoutBoothCalendarRoute
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/mqtt-items': typeof LayoutMqttItemsRoute
   '/_layout/phone-booths': typeof LayoutPhoneBoothsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/admin/admin': typeof LayoutAdminAdminRoute
+  '/_layout/admin/clients': typeof LayoutAdminClientsRoute
   '/_layout/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/_layout/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -149,13 +158,14 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
     | '/booth-calendar'
     | '/items'
     | '/mqtt-items'
     | '/phone-booths'
     | '/settings'
     | '/'
+    | '/admin/admin'
+    | '/admin/clients'
     | '/usage-reports/charts'
     | '/usage-reports/table'
   fileRoutesByTo: FileRoutesByTo
@@ -164,13 +174,14 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
     | '/booth-calendar'
     | '/items'
     | '/mqtt-items'
     | '/phone-booths'
     | '/settings'
     | '/'
+    | '/admin/admin'
+    | '/admin/clients'
     | '/usage-reports/charts'
     | '/usage-reports/table'
   id:
@@ -180,13 +191,14 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/_layout/admin'
     | '/_layout/booth-calendar'
     | '/_layout/items'
     | '/_layout/mqtt-items'
     | '/_layout/phone-booths'
     | '/_layout/settings'
     | '/_layout/'
+    | '/_layout/admin/admin'
+    | '/_layout/admin/clients'
     | '/_layout/usage-reports/charts'
     | '/_layout/usage-reports/table'
   fileRoutesById: FileRoutesById
@@ -278,13 +290,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutBoothCalendarRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/admin': {
-      id: '/_layout/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof LayoutAdminRouteImport
-      parentRoute: typeof LayoutRoute
-    }
     '/_layout/usage-reports/table': {
       id: '/_layout/usage-reports/table'
       path: '/usage-reports/table'
@@ -299,29 +304,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutUsageReportsChartsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/admin/clients': {
+      id: '/_layout/admin/clients'
+      path: '/admin/clients'
+      fullPath: '/admin/clients'
+      preLoaderRoute: typeof LayoutAdminClientsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/admin/admin': {
+      id: '/_layout/admin/admin'
+      path: '/admin/admin'
+      fullPath: '/admin/admin'
+      preLoaderRoute: typeof LayoutAdminAdminRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
 interface LayoutRouteChildren {
-  LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutBoothCalendarRoute: typeof LayoutBoothCalendarRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutMqttItemsRoute: typeof LayoutMqttItemsRoute
   LayoutPhoneBoothsRoute: typeof LayoutPhoneBoothsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutAdminAdminRoute: typeof LayoutAdminAdminRoute
+  LayoutAdminClientsRoute: typeof LayoutAdminClientsRoute
   LayoutUsageReportsChartsRoute: typeof LayoutUsageReportsChartsRoute
   LayoutUsageReportsTableRoute: typeof LayoutUsageReportsTableRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutAdminRoute: LayoutAdminRoute,
   LayoutBoothCalendarRoute: LayoutBoothCalendarRoute,
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutMqttItemsRoute: LayoutMqttItemsRoute,
   LayoutPhoneBoothsRoute: LayoutPhoneBoothsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutAdminAdminRoute: LayoutAdminAdminRoute,
+  LayoutAdminClientsRoute: LayoutAdminClientsRoute,
   LayoutUsageReportsChartsRoute: LayoutUsageReportsChartsRoute,
   LayoutUsageReportsTableRoute: LayoutUsageReportsTableRoute,
 }

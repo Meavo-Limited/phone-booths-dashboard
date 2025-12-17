@@ -47,9 +47,23 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
     ...items.slice(4),
   ]
 
+  // const finalItems: Item[] = currentUser?.is_superuser
+  //   ? [...allItems, { icon: FiUsers, title: "Admin", path: "/admin" }]
+  //   : allItems
+  
   const finalItems: Item[] = currentUser?.is_superuser
-    ? [...allItems, { icon: FiUsers, title: "Admin", path: "/admin" }]
-    : allItems
+  ? [
+      ...allItems,
+      {
+        icon: FiUsers,
+        title: "Admin",
+        submenu: [
+          { icon: FiUsers, title: "Users", path: "/admin/admin" },
+          { icon: FiBriefcase, title: "Clients", path: "/admin/clients" },
+        ],
+      },
+    ]
+  : allItems
 
   const toggleExpand = (title: string) => {
     setExpandedItems((prev) =>

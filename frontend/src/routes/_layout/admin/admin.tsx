@@ -28,7 +28,7 @@ function getUsersQueryOptions({ page }: { page: number }) {
   }
 }
 
-export const Route = createFileRoute("/_layout/admin")({
+export const Route = createFileRoute("/_layout/admin/admin")({
   component: Admin,
   validateSearch: (search) => usersSearchSchema.parse(search),
 })
@@ -46,7 +46,7 @@ function UsersTable() {
 
   const setPage = (page: number) => {
     navigate({
-      to: "/admin",
+      to: "/admin/admin",
       search: (prev) => ({ ...prev, page }),
     })
   }
