@@ -48,12 +48,12 @@ function UsageReportsTablePage() {
 
   const startStr =
     selectedDates.length === 2
-      ? selectedDates[0].toISOString().slice(0, 10)
-      : sevenDaysAgo.toISOString().slice(0, 10)
+      ? selectedDates[0].toLocaleDateString("en-CA")
+      : sevenDaysAgo.toLocaleDateString("en-CA")
   const endStr =
     selectedDates.length === 2
-      ? selectedDates[1].toISOString().slice(0, 10)
-      : today.toISOString().slice(0, 10)
+      ? selectedDates[1].toLocaleDateString("en-CA")
+      : today.toLocaleDateString("en-CA")
   
   let boothIds: string[] = Object.keys(boothMap)
 
