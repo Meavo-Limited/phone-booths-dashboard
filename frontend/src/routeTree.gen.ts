@@ -22,6 +22,7 @@ import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBoothCalendarRouteImport } from './routes/_layout/booth-calendar'
 import { Route as LayoutUsageReportsTableRouteImport } from './routes/_layout/usage-reports/table'
 import { Route as LayoutUsageReportsChartsRouteImport } from './routes/_layout/usage-reports/charts'
+import { Route as LayoutAdminOrgUnitsRouteImport } from './routes/_layout/admin/org-units'
 import { Route as LayoutAdminClientsRouteImport } from './routes/_layout/admin/clients'
 import { Route as LayoutAdminAdminRouteImport } from './routes/_layout/admin/admin'
 
@@ -90,6 +91,11 @@ const LayoutUsageReportsChartsRoute =
     path: '/usage-reports/charts',
     getParentRoute: () => LayoutRoute,
   } as any)
+const LayoutAdminOrgUnitsRoute = LayoutAdminOrgUnitsRouteImport.update({
+  id: '/admin/org-units',
+  path: '/admin/org-units',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutAdminClientsRoute = LayoutAdminClientsRouteImport.update({
   id: '/admin/clients',
   path: '/admin/clients',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
   '/admin/admin': typeof LayoutAdminAdminRoute
   '/admin/clients': typeof LayoutAdminClientsRoute
+  '/admin/org-units': typeof LayoutAdminOrgUnitsRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
   '/admin/admin': typeof LayoutAdminAdminRoute
   '/admin/clients': typeof LayoutAdminClientsRoute
+  '/admin/org-units': typeof LayoutAdminOrgUnitsRoute
   '/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/admin/admin': typeof LayoutAdminAdminRoute
   '/_layout/admin/clients': typeof LayoutAdminClientsRoute
+  '/_layout/admin/org-units': typeof LayoutAdminOrgUnitsRoute
   '/_layout/usage-reports/charts': typeof LayoutUsageReportsChartsRoute
   '/_layout/usage-reports/table': typeof LayoutUsageReportsTableRoute
 }
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/admin'
     | '/admin/clients'
+    | '/admin/org-units'
     | '/usage-reports/charts'
     | '/usage-reports/table'
   fileRoutesByTo: FileRoutesByTo
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/admin'
     | '/admin/clients'
+    | '/admin/org-units'
     | '/usage-reports/charts'
     | '/usage-reports/table'
   id:
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/_layout/'
     | '/_layout/admin/admin'
     | '/_layout/admin/clients'
+    | '/_layout/admin/org-units'
     | '/_layout/usage-reports/charts'
     | '/_layout/usage-reports/table'
   fileRoutesById: FileRoutesById
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutUsageReportsChartsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/admin/org-units': {
+      id: '/_layout/admin/org-units'
+      path: '/admin/org-units'
+      fullPath: '/admin/org-units'
+      preLoaderRoute: typeof LayoutAdminOrgUnitsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/admin/clients': {
       id: '/_layout/admin/clients'
       path: '/admin/clients'
@@ -330,6 +349,7 @@ interface LayoutRouteChildren {
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutAdminAdminRoute: typeof LayoutAdminAdminRoute
   LayoutAdminClientsRoute: typeof LayoutAdminClientsRoute
+  LayoutAdminOrgUnitsRoute: typeof LayoutAdminOrgUnitsRoute
   LayoutUsageReportsChartsRoute: typeof LayoutUsageReportsChartsRoute
   LayoutUsageReportsTableRoute: typeof LayoutUsageReportsTableRoute
 }
@@ -343,6 +363,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutAdminAdminRoute: LayoutAdminAdminRoute,
   LayoutAdminClientsRoute: LayoutAdminClientsRoute,
+  LayoutAdminOrgUnitsRoute: LayoutAdminOrgUnitsRoute,
   LayoutUsageReportsChartsRoute: LayoutUsageReportsChartsRoute,
   LayoutUsageReportsTableRoute: LayoutUsageReportsTableRoute,
 }
