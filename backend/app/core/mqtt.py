@@ -19,6 +19,7 @@ from app.models.usage_sessions import UsageSessionCreate
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+SENSOR_SERIAL_SIMPLE = "SNSR-MAEVO-SOF-001"
 
 def on_connect(client: mqtt_client.Client, userdata: Any, flags: dict, rc: int) -> None:
     """Handle MQTT connection."""
@@ -167,128 +168,142 @@ def on_message_simple_booth_status(
     client: mqtt_client.Client, userdata: Any, msg: mqtt_client.MQTTMessage
 ) -> None:
     """
-    Handle simplified booth status messages.
-
     Topic: emqx/esp32
-    Payload: "1" or "0" (every second)
+    Payload: "1" or "0"
 
-    - Hardcoded sensor serial: SNSR-MAEVO-SOF-001
-    - Insert events ONLY on state change
+    Guarantees:
+    - Inserts ONLY on state change
+    - Single transaction
+    - Row-level locking
     """
-
-    SENSOR_SERIAL = "SNSR-MAEVO-SOF-001"
 
     try:
         raw_payload = msg.payload.decode().strip()
-        # logger.info(f"{datetime.now(timezone.utc)}: Received message {raw_payload} for {SENSOR_SERIAL}.")
 
         if raw_payload not in {"0", "1"}:
             logger.error(f"Invalid payload on {msg.topic}: {raw_payload}")
             return
 
-        booth_status = int(raw_payload)
+        new_state = int(raw_payload)
         event_time = datetime.now(timezone.utc)
 
         with Session(engine) as session:
-            # Fetch sensor
-            sensor_stmt = select(Sensor).where(Sensor.serial_number == SENSOR_SERIAL)
-            sensor = session.exec(sensor_stmt).first()
+            with session.begin():
 
-            if not sensor:
-                logger.error(f"Sensor {SENSOR_SERIAL} not found")
-                return
-
-            # Fetch phone booth
-            booth = session.get(PhoneBooth, sensor.phone_booth_id)
-            if not booth:
-                logger.error(f"Phone booth {sensor.phone_booth_id} not found")
-                return
-
-            # Ignore duplicate states (no state change)
-            if booth.state_id == booth_status:
-                logger.debug(
-                    f"Ignoring duplicate state {booth_status} for booth {booth.name}"
+                # --------------------------------------------------
+                # Fetch sensor
+                # --------------------------------------------------
+                sensor_stmt = select(Sensor).where(
+                    Sensor.serial_number == SENSOR_SERIAL_SIMPLE
                 )
-                return
+                sensor = session.exec(sensor_stmt).one_or_none()
 
-            logger.info(
-                f"State change detected for booth {booth.name}: "
-                f"{booth.state_id} -> {booth_status}"
-            )
+                if not sensor:
+                    logger.error(f"Sensor {SENSOR_SERIAL_SIMPLE} not found")
+                    return
 
-            # Update booth state
-            booth.state_id = booth_status
-            booth.last_seen = event_time
-            booth.updated_at = event_time
-            session.add(booth)
-            session.commit()
-
-            # Create sensor event
-            sensor_event_in = SensorEventCreate(
-                sensor_id=sensor.id,
-                phone_booth_id=booth.id,
-                client_id=booth.client_id,
-                org_unit_id=booth.org_unit_id,
-                state_id=booth_status,
-                event_time_utc=event_time,
-            )
-
-            sensor_event = create_sensor_event(
-                session=session,
-                sensor_event_in=sensor_event_in,
-                raw_payload={"boothstatus": booth_status},
-            )
-
-            sensor.updated_at = event_time
-            session.add(sensor)
-            session.commit()
-
-            logger.info(
-                f"Created sensor event (simple topic) "
-                f"for booth {booth.name}, state={booth_status}"
-            )
-
-            # If booth becomes free → create usage session
-            if booth_status == 0:
-                busy_event_stmt = (
-                    select(SensorEvent)
-                    .where(
-                        SensorEvent.phone_booth_id == booth.id,
-                        SensorEvent.state_id == 1,
-                    )
-                    .order_by(SensorEvent.event_time_utc.desc())
+                # --------------------------------------------------
+                # Fetch booth WITH LOCK
+                # --------------------------------------------------
+                booth_stmt = (
+                    select(PhoneBooth)
+                    .where(PhoneBooth.id == sensor.phone_booth_id)
+                    .with_for_update()
                 )
+                booth = session.exec(booth_stmt).one_or_none()
 
-                busy_event = session.exec(busy_event_stmt).first()
+                if not booth:
+                    logger.error(f"Phone booth {sensor.phone_booth_id} not found")
+                    return
 
-                if not busy_event:
-                    logger.warning(
-                        f"No busy event found before free event for booth {booth.name}"
+                # --------------------------------------------------
+                # Ignore duplicate states (atomic & safe)
+                # --------------------------------------------------
+                if booth.state_id == new_state:
+                    logger.debug(
+                        f"Ignoring duplicate state {new_state} for booth {booth.name}"
                     )
                     return
 
-                duration_seconds = int(
-                    (event_time - busy_event.event_time_utc).total_seconds()
+                logger.info(
+                    f"State change for booth {booth.name}: "
+                    f"{booth.state_id} → {new_state}"
                 )
 
-                usage_session_in = UsageSessionCreate(
+                # --------------------------------------------------
+                # Update booth
+                # --------------------------------------------------
+                booth.state_id = new_state
+                booth.last_seen = event_time
+                booth.updated_at = event_time
+                session.add(booth)
+
+                # --------------------------------------------------
+                # Create sensor event
+                # --------------------------------------------------
+                sensor_event_in = SensorEventCreate(
+                    sensor_id=sensor.id,
                     phone_booth_id=booth.id,
                     client_id=booth.client_id,
                     org_unit_id=booth.org_unit_id,
-                    start_time=busy_event.event_time_utc,
-                    end_time=event_time,
-                    duration_seconds=duration_seconds,
+                    state_id=new_state,
+                    event_time_utc=event_time,
                 )
 
-                create_usage_session(
+                sensor_event = create_sensor_event(
                     session=session,
-                    usage_session_in=usage_session_in,
+                    sensor_event_in=sensor_event_in,
+                    raw_payload={"boothstatus": new_state},
                 )
 
-                logger.info(
-                    f"Created usage session for booth {booth.name}: "
-                    f"{duration_seconds}s"
-                )
+                sensor.updated_at = event_time
+                session.add(sensor)
+
+                # --------------------------------------------------
+                # Create usage session ONLY on busy → free
+                # --------------------------------------------------
+                if new_state == 0:
+                    busy_event_stmt = (
+                        select(SensorEvent)
+                        .where(
+                            SensorEvent.phone_booth_id == booth.id,
+                            SensorEvent.state_id == 1,
+                        )
+                        .order_by(SensorEvent.event_time_utc.desc())
+                        .limit(1)
+                    )
+
+                    busy_event = session.exec(busy_event_stmt).one_or_none()
+
+                    if not busy_event:
+                        logger.warning(
+                            f"No busy event found before free event "
+                            f"for booth {booth.name}"
+                        )
+                        return
+
+                    duration_seconds = int(
+                        (event_time - busy_event.event_time_utc).total_seconds()
+                    )
+
+                    usage_session_in = UsageSessionCreate(
+                        phone_booth_id=booth.id,
+                        client_id=booth.client_id,
+                        org_unit_id=booth.org_unit_id,
+                        start_time=busy_event.event_time_utc,
+                        end_time=event_time,
+                        duration_seconds=duration_seconds,
+                    )
+
+                    create_usage_session(
+                        session=session,
+                        usage_session_in=usage_session_in,
+                    )
+
+                    logger.info(
+                        f"Created usage session for booth {booth.name}: "
+                        f"{duration_seconds}s"
+                    )
 
     except Exception as e:
         logger.error(
