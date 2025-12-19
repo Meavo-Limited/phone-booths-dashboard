@@ -1,7 +1,7 @@
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { Link as RouterLink } from "@tanstack/react-router"
-import { FiBriefcase, FiHome, FiSettings, FiUsers, FiCalendar, FiBarChart2, FiList, FiGrid } from "react-icons/fi"
+import { FiBriefcase, FiHome, FiSettings, FiUsers, FiCalendar, FiBarChart2, FiList } from "react-icons/fi"
 import type { IconType } from "react-icons/lib"
 import type { UserPublic } from "@/client"
 import { useState } from "react"
@@ -47,20 +47,23 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
     ...items.slice(4),
   ]
 
+  // const finalItems: Item[] = currentUser?.is_superuser
+  //   ? [...allItems, { icon: FiUsers, title: "Admin", path: "/admin" }]
+  //   : allItems
+  
   const finalItems: Item[] = currentUser?.is_superuser
-    ? [
-        ...allItems,
-        {
-          icon: FiUsers,
-          title: "Admin",
-          submenu: [
-            { icon: FiUsers, title: "Users", path: "/admin/admin" },
-            { icon: FiBriefcase, title: "Clients", path: "/admin/clients" },
-            { icon: FiGrid, title: "Organization Units", path: "/admin/org-units" },
-          ],
-        },
-      ]
-    : allItems
+  ? [
+      ...allItems,
+      {
+        icon: FiUsers,
+        title: "Admin",
+        submenu: [
+          { icon: FiUsers, title: "Users", path: "/admin/admin" },
+          { icon: FiBriefcase, title: "Clients", path: "/admin/clients" },
+        ],
+      },
+    ]
+  : allItems
 
   const toggleExpand = (title: string) => {
     setExpandedItems((prev) =>
