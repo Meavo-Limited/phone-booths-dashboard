@@ -1,7 +1,7 @@
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { Link as RouterLink } from "@tanstack/react-router"
-import { FiBriefcase, FiHome, FiSettings, FiUsers, FiCalendar, FiBarChart2, FiList, FiGrid } from "react-icons/fi"
+import { FiBriefcase, FiHome, FiSettings, FiUsers, FiCalendar, FiBarChart2, FiList, FiGrid, FiFile } from "react-icons/fi"
 import type { IconType } from "react-icons/lib"
 import type { UserPublic } from "@/client"
 import { useState } from "react"
@@ -57,6 +57,7 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
             { icon: FiUsers, title: "Users", path: "/admin/admin" },
             { icon: FiBriefcase, title: "Clients", path: "/admin/clients" },
             { icon: FiGrid, title: "Organization Units", path: "/admin/org-units" },
+            { icon: FiFile, title: "Import from CSV", path: "/admin/import-from-csv" },
           ],
         },
       ]
