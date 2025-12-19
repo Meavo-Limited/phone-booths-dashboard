@@ -73,6 +73,18 @@ def create_sensor_event(
     session.refresh(db_event)
     return db_event
 
+def create_sensor_event_transaction(
+    session: Session,
+    sensor_event_in: SensorEventCreate,
+    raw_payload: dict,
+) -> SensorEvent:
+    db_event = SensorEvent(
+        **sensor_event_in.model_dump(),
+        raw_payload=raw_payload,
+    )
+    session.add(db_event)
+
+    return db_event
 
 def create_usage_session(
     *, session: Session, usage_session_in: UsageSessionCreate
@@ -82,4 +94,13 @@ def create_usage_session(
     session.add(db_session)
     session.commit()
     session.refresh(db_session)
+    return db_session
+
+def create_usage_session_transaction(
+    *, session: Session, usage_session_in: UsageSessionCreate
+) -> UsageSession:
+    """Create a new usage session."""
+    db_session = UsageSession.model_validate(usage_session_in)
+    session.add(db_session)
+    
     return db_session

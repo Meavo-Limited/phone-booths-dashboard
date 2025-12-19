@@ -10,7 +10,7 @@ from sqlmodel import Session, select
 
 from app.core.config import settings
 from app.core.db import engine
-from app.crud import create_sensor_event, create_usage_session
+from app.crud import create_sensor_event, create_sensor_event_transaction, create_usage_session, create_usage_session_transaction
 from app.models.phone_booths import PhoneBooth
 from app.models.sensors import Sensor
 from app.models.sensor_events import SensorEvent, SensorEventCreate
@@ -179,6 +179,8 @@ def on_message_simple_booth_status(
 
     try:
         raw_payload = msg.payload.decode().strip()
+        
+        # logger.info(f"Received simplified booth status message: {raw_payload}")
 
         if raw_payload not in {"0", "1"}:
             logger.error(f"Invalid payload on {msg.topic}: {raw_payload}")
@@ -250,7 +252,7 @@ def on_message_simple_booth_status(
                     event_time_utc=event_time,
                 )
 
-                sensor_event = create_sensor_event(
+                sensor_event = create_sensor_event_transaction(
                     session=session,
                     sensor_event_in=sensor_event_in,
                     raw_payload={"boothstatus": new_state},
@@ -295,7 +297,7 @@ def on_message_simple_booth_status(
                         duration_seconds=duration_seconds,
                     )
 
-                    create_usage_session(
+                    create_usage_session_transaction(
                         session=session,
                         usage_session_in=usage_session_in,
                     )
