@@ -482,6 +482,12 @@ export type OrgUnitsDeleteOrgUnitData = {
 
 export type OrgUnitsDeleteOrgUnitResponse = (Message);
 
+export type OrgUnitsReadOrgUnitsByClientData = {
+    clientId: string;
+};
+
+export type OrgUnitsReadOrgUnitsByClientResponse = (Array<OrgUnitRead>);
+
 export type OrgUnitTypesReadOrgUnitTypesResponse = (Array<OrgUnitTypeRead>);
 
 export type OrgUnitTypesCreateOrgUnitTypeData = {

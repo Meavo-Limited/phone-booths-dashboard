@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import { FaPlus } from "react-icons/fa"
 import {
@@ -40,10 +40,10 @@ function getClientsQuery() {
   }
 }
 
-function getOrgUnitsQuery() {
+function getOrgUnitsByClientQuery({ clientId }: { clientId: string }) {
   return {
-    queryKey: ["orgUnits"],
-    queryFn: () => OrgUnitsService.readOrgUnits(),
+    queryFn: () => OrgUnitsService.readOrgUnitsByClient({ clientId }),
+    queryKey: ["orgUnits", "byClient", clientId],
   }
 }
 
@@ -171,7 +171,7 @@ function ParentOrgUnitSelect({
   )
 }
 
-const AddOrgUnit = () => {
+const AddOrgUnit = ({ selectedClient }: { selectedClient: string | null }) => {
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const { showSuccessToast } = useCustomToast()
@@ -180,6 +180,8 @@ const AddOrgUnit = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isValid, isSubmitting },
   } = useForm<OrgUnitCreate>({
     mode: "onBlur",
@@ -188,10 +190,25 @@ const AddOrgUnit = () => {
       name: "",
       type_id: null,
       timezone: "",
-      client_id: "",
+      client_id: selectedClient || "",
       parent_id: null,
     },
   })
+
+  // Watch the client_id field to filter parent org units
+  const watchedClientId = watch("client_id")
+
+  // Update client_id when selectedClient changes
+  useEffect(() => {
+    if (selectedClient) {
+      setValue("client_id", selectedClient)
+    }
+  }, [selectedClient, setValue])
+
+  // Reset parent_id when client changes
+  useEffect(() => {
+    setValue("parent_id", null)
+  }, [watchedClientId, setValue])
 
   const clientsQuery = useQuery(getClientsQuery())
   const clientsCollection = createListCollection({
@@ -202,7 +219,12 @@ const AddOrgUnit = () => {
       })) ?? [],
   })
 
-  const orgUnitsQuery = useQuery(getOrgUnitsQuery())
+  // Fetch org units for the selected client only
+  const orgUnitsQuery = useQuery({
+    ...getOrgUnitsByClientQuery({ clientId: watchedClientId as string }),
+    enabled: !!watchedClientId, // Only fetch when client is selected
+  })
+  
   const orgUnitsCollection = createListCollection({
     items:
       orgUnitsQuery.data?.map((unit) => ({

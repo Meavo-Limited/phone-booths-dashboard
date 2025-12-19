@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, DashboardDashboardStatsData, DashboardDashboardStatsResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsPaginatedData, PhoneBoothsReadPhoneBoothsPaginatedResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsReadPhoneBoothsByIdsData, PhoneBoothsReadPhoneBoothsByIdsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PhoneBoothsBulkUpdateWorkdaySettingsData, PhoneBoothsBulkUpdateWorkdaySettingsResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsHourlyUtilizationData, UsageSessionsHourlyUtilizationResponse, UsageSessionsUsageReportsChartsData, UsageSessionsUsageReportsChartsResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { BoothStatesReadBoothStatesResponse, BoothStatesCreateBoothStateData, BoothStatesCreateBoothStateResponse, BoothStatesReadBoothStateData, BoothStatesReadBoothStateResponse, BoothStatesUpdateBoothStateData, BoothStatesUpdateBoothStateResponse, BoothStatesDeleteBoothStateData, BoothStatesDeleteBoothStateResponse, ClientsReadClientsResponse, ClientsCreateClientData, ClientsCreateClientResponse, ClientsReadClientData, ClientsReadClientResponse, ClientsUpdateClientData, ClientsUpdateClientResponse, ClientsDeleteClientData, ClientsDeleteClientResponse, DashboardDashboardStatsData, DashboardDashboardStatsResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrgUnitsReadOrgUnitsResponse, OrgUnitsCreateOrgUnitData, OrgUnitsCreateOrgUnitResponse, OrgUnitsReadOrgUnitData, OrgUnitsReadOrgUnitResponse, OrgUnitsUpdateOrgUnitData, OrgUnitsUpdateOrgUnitResponse, OrgUnitsDeleteOrgUnitData, OrgUnitsDeleteOrgUnitResponse, OrgUnitsReadOrgUnitsByClientData, OrgUnitsReadOrgUnitsByClientResponse, OrgUnitTypesReadOrgUnitTypesResponse, OrgUnitTypesCreateOrgUnitTypeData, OrgUnitTypesCreateOrgUnitTypeResponse, OrgUnitTypesReadOrgUnitTypeData, OrgUnitTypesReadOrgUnitTypeResponse, OrgUnitTypesUpdateOrgUnitTypeData, OrgUnitTypesUpdateOrgUnitTypeResponse, OrgUnitTypesDeleteOrgUnitTypeData, OrgUnitTypesDeleteOrgUnitTypeResponse, PhoneBoothsReadPhoneBoothsPaginatedData, PhoneBoothsReadPhoneBoothsPaginatedResponse, PhoneBoothsCreatePhoneBoothData, PhoneBoothsCreatePhoneBoothResponse, PhoneBoothsReadPhoneBoothsData, PhoneBoothsReadPhoneBoothsResponse, PhoneBoothsReadBusyPhoneBoothsData, PhoneBoothsReadBusyPhoneBoothsResponse, PhoneBoothsReadPhoneBoothsByIdsData, PhoneBoothsReadPhoneBoothsByIdsResponse, PhoneBoothsCalculateWorkingTimeData, PhoneBoothsCalculateWorkingTimeResponse, PhoneBoothsReadPhoneBoothData, PhoneBoothsReadPhoneBoothResponse, PhoneBoothsUpdatePhoneBoothData, PhoneBoothsUpdatePhoneBoothResponse, PhoneBoothsDeletePhoneBoothData, PhoneBoothsDeletePhoneBoothResponse, PhoneBoothsBulkUpdateWorkdaySettingsData, PhoneBoothsBulkUpdateWorkdaySettingsResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesReadRolesResponse, RolesCreateRoleData, RolesCreateRoleResponse, RolesReadRoleData, RolesReadRoleResponse, RolesUpdateRoleData, RolesUpdateRoleResponse, RolesDeleteRoleData, RolesDeleteRoleResponse, SensorEventsReadSensorEventsData, SensorEventsReadSensorEventsResponse, SensorEventsCreateSensorEventData, SensorEventsCreateSensorEventResponse, SensorEventsReadSensorEventData, SensorEventsReadSensorEventResponse, SensorEventsDeleteSensorEventData, SensorEventsDeleteSensorEventResponse, SensorsReadSensorsResponse, SensorsCreateSensorData, SensorsCreateSensorResponse, SensorsReadSensorData, SensorsReadSensorResponse, SensorsUpdateSensorData, SensorsUpdateSensorResponse, SensorsDeleteSensorData, SensorsDeleteSensorResponse, UsageSessionsReadUsageSessionsData, UsageSessionsReadUsageSessionsResponse, UsageSessionsCreateUsageSessionData, UsageSessionsCreateUsageSessionResponse, UsageSessionsHourlyUtilizationData, UsageSessionsHourlyUtilizationResponse, UsageSessionsUsageReportsChartsData, UsageSessionsUsageReportsChartsResponse, UsageSessionsReadUsageSessionData, UsageSessionsReadUsageSessionResponse, UsageSessionsDeleteUsageSessionData, UsageSessionsDeleteUsageSessionResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class BoothStatesService {
     /**
@@ -519,6 +519,30 @@ export class OrgUnitsService {
             url: '/api/v1/org-units/{id}',
             path: {
                 id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Org Units By Client
+     * List org units for a specific client.
+     *
+     * - Superusers can access any client
+     * - Non-superusers can only access their own client
+     * @param data The data for the request.
+     * @param data.clientId
+     * @returns OrgUnitRead Successful Response
+     * @throws ApiError
+     */
+    public static readOrgUnitsByClient(data: OrgUnitsReadOrgUnitsByClientData): CancelablePromise<OrgUnitsReadOrgUnitsByClientResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/org-units/by-client/{client_id}',
+            path: {
+                client_id: data.clientId
             },
             errors: {
                 422: 'Validation Error'
@@ -1197,13 +1221,10 @@ export class UsageSessionsService {
      * Hourly Utilization
      * Returns hourly utilization % for the selected booths across the given period.
      *
-     * Assumptions / behavior:
-     * - booth_ids: comma-separated UUIDs (e.g. "id1,id2,...").
-     * - start_date / end_date are inclusive and are dates (no times).
-     * - All booths must share the same workday_start and workday_end (otherwise 400).
-     * - Timezones are ignored for MVP (timestamps are used as stored).
-     * - For each hour label (e.g. "08:00"), we sum usage seconds across ALL days in the period
-     * and normalize by (#booths * 3600 * number_of_days).
+     * Rules:
+     * - DB stores timestamptz (UTC internally)
+     * - Bucket math is done in the booth's LOCAL timezone
+     * - DB querying is done in UTC
      * @param data The data for the request.
      * @param data.boothIds Comma-separated list of booth UUIDs
      * @param data.startDate Inclusive start date YYYY-MM-DD
