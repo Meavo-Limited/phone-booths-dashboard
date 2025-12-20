@@ -16,6 +16,7 @@ from app.api.routes import (
     sensor_events,
     usage_sessions,
     dashboard,
+    csv_import,
 )
 from app.core.config import settings
 
@@ -34,6 +35,7 @@ api_router.include_router(sensors.router)
 api_router.include_router(sensor_events.router)
 api_router.include_router(usage_sessions.router)
 api_router.include_router(dashboard.router)
+api_router.include_router(csv_import.router)
 
 
 if settings.ENVIRONMENT == "local":

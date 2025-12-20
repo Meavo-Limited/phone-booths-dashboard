@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import { FaExchangeAlt } from "react-icons/fa"
 
@@ -42,10 +42,10 @@ function getClientsQuery() {
   }
 }
 
-function getOrgUnitsQuery() {
+function getOrgUnitsByClientQuery({ clientId }: { clientId: string }) {
   return {
-    queryKey: ["orgUnits"],
-    queryFn: () => OrgUnitsService.readOrgUnits(),
+    queryFn: () => OrgUnitsService.readOrgUnitsByClient({ clientId }),
+    queryKey: ["orgUnits", "byClient", clientId],
   }
 }
 
@@ -197,6 +197,8 @@ const EditOrgUnit = ({ orgUnit }: EditOrgUnitProps) => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<OrgUnitCreate>({
     mode: "onBlur",
@@ -210,6 +212,14 @@ const EditOrgUnit = ({ orgUnit }: EditOrgUnitProps) => {
     },
   })
 
+  // Watch the client_id field to filter parent org units
+  const watchedClientId = watch("client_id")
+
+  // Reset parent_id when client changes
+  useEffect(() => {
+    setValue("parent_id", null)
+  }, [watchedClientId, setValue])
+
   const clientsQuery = useQuery(getClientsQuery())
   const clientsCollection = createListCollection({
     items:
@@ -219,7 +229,12 @@ const EditOrgUnit = ({ orgUnit }: EditOrgUnitProps) => {
       })) ?? [],
   })
 
-  const orgUnitsQuery = useQuery(getOrgUnitsQuery())
+  // Fetch org units for the selected client only
+  const orgUnitsQuery = useQuery({
+    ...getOrgUnitsByClientQuery({ clientId: watchedClientId as string }),
+    enabled: !!watchedClientId, // Only fetch when client is selected
+  })
+
   const orgUnitsCollection = createListCollection({
     items:
       orgUnitsQuery.data?.map((unit) => ({
