@@ -1,10 +1,10 @@
-import { Badge, Container, Flex, Heading, Table, Select, createListCollection } from "@chakra-ui/react"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { Container, Flex, Heading, Table, Select, createListCollection } from "@chakra-ui/react"
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
 import { useState, useEffect } from "react"
 
-import { type OrgUnitRead, OrgUnitsService, ClientsService, type UserPublic } from "@/client"
+import { OrgUnitsService, ClientsService } from "@/client"
 import AddOrgUnit from "@/components/Admin/AddOrgUnit"
 import {
   PaginationItems,
@@ -102,8 +102,6 @@ function ClientFilter({
 }
 
 function OrgUnitsTable({ selectedClient }: { selectedClient: string | null }) {
-  const queryClient = useQueryClient()
-  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const navigate = useNavigate({ from: Route.fullPath })
   const { page } = Route.useSearch()
 
