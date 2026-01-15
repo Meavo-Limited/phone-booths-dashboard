@@ -76,11 +76,10 @@ def create_sensor_event(
 def create_sensor_event_transaction(
     session: Session,
     sensor_event_in: SensorEventCreate,
-    raw_payload: dict,
+    raw_payload: dict | None = None,
 ) -> SensorEvent:
-    db_event = SensorEvent(
-        **sensor_event_in.model_dump(),
-        raw_payload=raw_payload,
+    db_event = SensorEvent.model_validate(
+        sensor_event_in, update={"raw_payload": raw_payload}
     )
     session.add(db_event)
 
