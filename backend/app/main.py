@@ -8,9 +8,9 @@ from app.core.config import settings
 from app.core.mqtt import get_mqtt_client
 from contextlib import asynccontextmanager
 import logging
+from app.core.logging_config import setup_logging
 
-
-logging.basicConfig(level=logging.INFO)
+setup_logging()
 logger = logging.getLogger(__name__)
 
 def custom_generate_unique_id(route: APIRoute) -> str:

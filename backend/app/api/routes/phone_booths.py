@@ -12,7 +12,6 @@ from app.models.general_models import Message
 import logging
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/phone-booths", tags=["phone_booths"])

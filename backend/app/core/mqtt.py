@@ -16,8 +16,18 @@ from app.models.sensors import Sensor
 from app.models.sensor_events import SensorEvent, SensorEventCreate
 from app.models.usage_sessions import UsageSessionCreate
 
-logging.basicConfig(level=logging.INFO)
+from logging.handlers import RotatingFileHandler
+
+
+# --------------------------------------------------
+# Main application logger (console)
+# --------------------------------------------------
 logger = logging.getLogger(__name__)
+
+# --------------------------------------------------
+# Separate payload logger (file only)
+# --------------------------------------------------
+payload_logger = logging.getLogger("payload_logger")
 
 SENSOR_SERIAL_SIMPLE = "SNSR-MAEVO-SOF-001"
 
@@ -185,6 +195,8 @@ def on_message_simple_booth_status(
         if raw_payload not in {"0", "1"}:
             logger.error(f"Invalid payload on {msg.topic}: {raw_payload}")
             return
+        
+        payload_logger.info(raw_payload)
 
         new_state = int(raw_payload)
         event_time = datetime.now(timezone.utc)
