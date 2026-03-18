@@ -12,9 +12,9 @@ from app.models.phone_booths import PhoneBooth
 from pydantic import BaseModel
 import logging
 from pprint import pprint
+from zoneinfo import ZoneInfo
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/usage-sessions", tags=["usage_sessions"]) 
@@ -55,9 +55,11 @@ def hourly_utilization(
     try:
         booth_uuid_list = [uuid.UUID(x.strip()) for x in booth_ids.split(",") if x.strip()]
     except Exception:
+        logger.error(f"Hourly utilization - Invalid booth_ids format: {booth_ids}")
         raise HTTPException(status_code=400, detail="Invalid booth_ids format")
 
     if not booth_uuid_list:
+        logger.error("Hourly utilization - No booth_ids provided")
         raise HTTPException(status_code=400, detail="At least one booth_id is required")
 
     # ------------------------------------------------------------------
@@ -67,11 +69,13 @@ def hourly_utilization(
     booths = session.exec(stmt).all()
 
     if len(booths) != len(booth_uuid_list):
+        logger.error(f"Hourly utilization - One or more booths not found. Requested: {booth_uuid_list}, Found: {[b.id for b in booths]}")
         raise HTTPException(status_code=404, detail="One or more phone booths not found")
 
     if not current_user.is_superuser:
         for b in booths:
             if b.client_id != current_user.client_id:
+                logger.error(f"Hourly utilization - Permission denied for booth {b.id} (client_id: {b.client_id}) and user (client_id: {current_user.client_id})")
                 raise HTTPException(status_code=403, detail="Not enough permissions")
 
     # ------------------------------------------------------------------
@@ -81,6 +85,7 @@ def hourly_utilization(
     workday_ends = {b.workday_end for b in booths}
 
     if len(workday_starts) != 1 or len(workday_ends) != 1:
+        logger.error("Hourly utilization - Inconsistent workday windows across booths")
         raise HTTPException(
             status_code=400,
             detail="All booths must share the same workday_start/workday_end"
@@ -89,18 +94,22 @@ def hourly_utilization(
     workday_start: time = workday_starts.pop()
     workday_end: time = workday_ends.pop()
 
-    if workday_start.tzinfo is None or workday_end.tzinfo is None:
+    timezones = {b.timezone for b in booths}
+
+    if len(timezones) != 1:
+        logger.error("Hourly utilization - Inconsistent timezones across booths")
         raise HTTPException(
-            status_code=500,
-            detail="workday_start/workday_end must be timezone-aware"
+            status_code=400,
+            detail="All booths must share the same timezone (MVP)"
         )
 
-    tz = workday_start.tzinfo
+    tz = ZoneInfo(timezones.pop())
 
     start_hour = workday_start.hour
     end_hour = workday_end.hour
 
     if end_hour <= start_hour:
+        logger.error("Hourly utilization - Invalid workday window: end_hour must be > start_hour")
         raise HTTPException(status_code=400, detail="Invalid workday window")
 
     hour_labels = [
@@ -112,6 +121,7 @@ def hourly_utilization(
     # Period bounds (LOCAL → UTC)
     # ------------------------------------------------------------------
     if end_date < start_date:
+        logger.error(f"Hourly utilization - Invalid date range: start_date={start_date}, end_date={end_date}")
         raise HTTPException(status_code=400, detail="end_date must be >= start_date")
 
     days = (end_date - start_date).days + 1
