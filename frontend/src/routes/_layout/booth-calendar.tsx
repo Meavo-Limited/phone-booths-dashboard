@@ -92,7 +92,7 @@ function CalendarView({ booths }: { booths: any[] }) {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
-        initialView='dayGridMonth'
+        initialView='timeGridDay'
         events={events}
         eventDisplay="block"
         height="auto"
