@@ -9,7 +9,7 @@ import {
     YAxis,
     Tooltip,
 } from "recharts"
-import { Box, Heading } from "@chakra-ui/react"
+import { Box, Heading, Text } from "@chakra-ui/react"
 
 interface ChartPoint {
     hour: string
@@ -25,11 +25,13 @@ interface Props {
 export function HourlyUtilizationContainer({ boothIds, startDate, endDate }: Props) {
     const [chartData, setChartData] = useState<ChartPoint[]>([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         async function load() {
             try {
                 setLoading(true)
+                setError(null)
 
                 const boothIdsString = boothIds.join(",")
 
@@ -39,15 +41,28 @@ export function HourlyUtilizationContainer({ boothIds, startDate, endDate }: Pro
                     endDate,
                 })
 
-                // Transform API response -> chart format
                 const transformed: ChartPoint[] = res.hours.map((item) => ({
                     hour: item.time,
-                    utilization: Number((item.utilization * 100).toFixed(2)), // convert 0.23 → 23.00
+                    utilization: Number((item.utilization * 100).toFixed(2)),
                 }))
 
                 setChartData(transformed)
-            } catch (err) {
+            } catch (err: any) {
                 console.error("Failed to load hourly utilization:", err)
+
+                const detail =
+                    err?.body?.detail ||
+                    err?.response?.data?.detail ||
+                    err?.message ||
+                    ""
+
+                if (detail.includes("same timezone")) {
+                    setError(
+                        "Selected phone booths are in different timezones. Please select booths within the same timezone to view this chart."
+                    )
+                } else {
+                    setError("Failed to load hourly utilization chart.")
+                }
             } finally {
                 setLoading(false)
             }
@@ -57,6 +72,17 @@ export function HourlyUtilizationContainer({ boothIds, startDate, endDate }: Pro
     }, [boothIds, startDate, endDate])
 
     if (loading) return <div>Loading hourly utilization...</div>
+
+    if (error) {
+        return (
+            <Box mt={6}>
+                <Heading size="md" mb={2}>
+                    Utilization by Hour (%)
+                </Heading>
+                <Text color="orange.400">{error}</Text>
+            </Box>
+        )
+    }
 
     return <HourlyUtilizationChart data={chartData} />
 }
