@@ -53,6 +53,7 @@ def import_phone_booths_csv(
         "booth_serial_num",
         "org_unit_name",
         "sensor_serial_num",
+        "timezone",
     }
 
     if not required_columns.issubset(reader.fieldnames or []):
@@ -86,9 +87,16 @@ def import_phone_booths_csv(
             sensor_serial = row["sensor_serial_num"].strip()
             booth_name = row["booth_name"].strip()
             org_unit_name = row["org_unit_name"].strip()
+            timezone_str = row["timezone"].strip()
 
-            if not all([booth_serial, sensor_serial, booth_name, org_unit_name]):
+            if not all([booth_serial, sensor_serial, booth_name, org_unit_name, timezone_str]):
                 raise ValueError("Missing required fields")
+
+            from zoneinfo import ZoneInfo
+            try:
+                ZoneInfo(timezone_str)
+            except Exception:
+                raise ValueError(f"Invalid timezone: {timezone_str}")
 
             # ---- Org unit lookup ----
             org_unit = session.exec(
@@ -122,6 +130,7 @@ def import_phone_booths_csv(
                 serial_number=booth_serial,
                 client_id=client.id,
                 org_unit_id=org_unit.id,
+                timezone=timezone_str,
             )
             session.add(booth)
             session.flush()  # get booth.id
@@ -129,7 +138,7 @@ def import_phone_booths_csv(
             # ---- Create sensor ----
             sensor = Sensor(
                 serial_number=sensor_serial,
-                booth_id=booth.id,
+                phone_booth_id=booth.id,
             )
             session.add(sensor)
 

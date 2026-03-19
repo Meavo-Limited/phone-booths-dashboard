@@ -74,9 +74,9 @@ const ImportPhoneBoothsSensors = () => {
   }
 
   const handleDownloadTemplate = () => {
-    const csvContent = `client_name,booth_name,booth_serial_num,org_unit_name,sensor_serial_num
-ExampleClient,Booth 1,BOOTH001,Engineering,SENSOR001
-ExampleClient,Booth 2,BOOTH002,Marketing,SENSOR002`
+    const csvContent = `client_name,booth_name,booth_serial_num,org_unit_name,sensor_serial_num,timezone
+ExampleClient,Booth 1,BOOTH001,Engineering,SENSOR001,Europe/Sofia
+ExampleClient,Booth 2,BOOTH002,Marketing,SENSOR002,Europe/Sofia`
 
     const blob = new Blob([csvContent], { type: "text/csv" })
     const url = window.URL.createObjectURL(blob)
@@ -142,7 +142,7 @@ ExampleClient,Booth 2,BOOTH002,Marketing,SENSOR002`
               </Text>
               <Text fontSize="sm" color="gray.600">
                 • Required columns: client_name, booth_name, booth_serial_num,
-                org_unit_name, sensor_serial_num
+                org_unit_name, sensor_serial_num, timezone
               </Text>
               <Text fontSize="sm" color="gray.600">
                 • All rows must belong to the same client
@@ -152,6 +152,9 @@ ExampleClient,Booth 2,BOOTH002,Marketing,SENSOR002`
               </Text>
               <Text fontSize="sm" color="gray.600">
                 • Organization units must exist in the system
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                • Timezone must be a valid IANA timezone (e.g. Europe/Sofia)
               </Text>
             </Box>
           </VStack>
