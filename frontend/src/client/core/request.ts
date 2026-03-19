@@ -231,6 +231,15 @@ export const getResponseBody = (response: AxiosResponse<unknown>): unknown => {
 };
 
 export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): void => {
+
+	if (result.status === 401 || result.status === 403) {
+		if (window.location.pathname !== "/login") {
+			localStorage.removeItem("access_token")
+			window.location.href = "/login"
+		}
+		return
+	}
+
 	const errors: Record<number, string> = {
 		400: 'Bad Request',
 		401: 'Unauthorized',
